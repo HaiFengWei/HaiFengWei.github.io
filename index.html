@@ -239,7 +239,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/04/YYDispatchQueuePool学习/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/04/GCD/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -258,7 +258,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/04/YYDispatchQueuePool学习/" itemprop="url">YYDispatchQueuePool学习</a></h1>
+                <a class="post-title-link" href="/2018/12/04/GCD/" itemprop="url">GCD</a></h1>
         
 
         <div class="post-meta">
@@ -289,8 +289,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/12/04/YYDispatchQueuePool学习/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/04/YYDispatchQueuePool学习/" itemprop="commentCount"></span>
+                <a href="/2018/12/04/GCD/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/04/GCD/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -319,17 +319,21 @@
 
       
         
-          <h2 id="目的："><a href="#目的：" class="headerlink" title="目的："></a>目的：</h2><p>解决当用<strong>并行队列</strong>来执行大量块时，当某个块所在线程被锁住时，<strong>并列队列</strong>会创建大量线程以至于占用了过多资源而影响到主线程的问题。
+          <p><strong>Dispatch Queue（队列）</strong>是一个对象，类似队列的数据结构，而且是 FIFO(First In, First Out)队列，因此任务开始执行的顺序，就是你把它们放到 queue 中的顺序。</p>
+<h2 id="GCD-中的队列类型可分为三种："><a href="#GCD-中的队列类型可分为三种：" class="headerlink" title="GCD 中的队列类型可分为三种："></a>GCD 中的队列类型可分为三种：</h2><ol>
+<li><strong>Serial Queue（串行队列）</strong> 串行队列中任务会按照添加到 queue 中的顺序一个一个执行。串行队列在前一个任务执行之前，后一个任务是被阻塞的，正因为如此，它们可以用来完成同步机制。</li>
+<li><strong>Concurrent Queue(并行队列):</strong> 并行队列，可以并发地执行多个任务，但是任务开始的顺序仍然是按照被添加到队列中的顺序。具体任务执行的线程和任务执行的并发数，都是由 GCD 进行管理的</li>
+<li><strong>Main Dispatch Queue（主队列）：</strong> 主队列是一个全局可见的串行队列，其中的任务会在主线程中执行。主队列通过与应用程序的 runloop 交互，把任务安插到 runloop 当中执行。因为主队列比较特殊，其中的任务确定会在主线程中执行，通常主队列会被用作同步的作用
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/12/04/YYDispatchQueuePool学习/#more" rel="contents">
+            <a class="btn" href="/2018/12/04/GCD/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
           <!--/noindex-->
         
       
-    </p></div>
+    </li></ol></div>
     
     
     
@@ -507,7 +511,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/04/GCD/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/04/YYDispatchQueuePool学习/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -526,7 +530,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/04/GCD/" itemprop="url">GCD</a></h1>
+                <a class="post-title-link" href="/2018/12/04/YYDispatchQueuePool学习/" itemprop="url">YYDispatchQueuePool学习</a></h1>
         
 
         <div class="post-meta">
@@ -557,8 +561,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/12/04/GCD/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/04/GCD/" itemprop="commentCount"></span>
+                <a href="/2018/12/04/YYDispatchQueuePool学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/04/YYDispatchQueuePool学习/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -587,21 +591,17 @@
 
       
         
-          <p><strong>Dispatch Queue（队列）</strong>是一个对象，类似队列的数据结构，而且是 FIFO(First In, First Out)队列，因此任务开始执行的顺序，就是你把它们放到 queue 中的顺序。</p>
-<h2 id="GCD-中的队列类型可分为三种："><a href="#GCD-中的队列类型可分为三种：" class="headerlink" title="GCD 中的队列类型可分为三种："></a>GCD 中的队列类型可分为三种：</h2><ol>
-<li><strong>Serial Queue（串行队列）</strong> 串行队列中任务会按照添加到 queue 中的顺序一个一个执行。串行队列在前一个任务执行之前，后一个任务是被阻塞的，正因为如此，它们可以用来完成同步机制。</li>
-<li><strong>Concurrent Queue(并行队列):</strong> 并行队列，可以并发地执行多个任务，但是任务开始的顺序仍然是按照被添加到队列中的顺序。具体任务执行的线程和任务执行的并发数，都是由 GCD 进行管理的</li>
-<li><strong>Main Dispatch Queue（主队列）：</strong> 主队列是一个全局可见的串行队列，其中的任务会在主线程中执行。主队列通过与应用程序的 runloop 交互，把任务安插到 runloop 当中执行。因为主队列比较特殊，其中的任务确定会在主线程中执行，通常主队列会被用作同步的作用
+          <h2 id="目的："><a href="#目的：" class="headerlink" title="目的："></a>目的：</h2><p>解决当用<strong>并行队列</strong>来执行大量块时，当某个块所在线程被锁住时，<strong>并列队列</strong>会创建大量线程以至于占用了过多资源而影响到主线程的问题。
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/12/04/GCD/#more" rel="contents">
+            <a class="btn" href="/2018/12/04/YYDispatchQueuePool学习/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
           <!--/noindex-->
         
       
-    </li></ol></div>
+    </p></div>
     
     
     
