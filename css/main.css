@@ -1822,7 +1822,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #9dff06;
+  background: #77ba4d;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2665,6 +2665,7 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: 50% 50%;
+  background-size: cover;
 }
 .main-inner {
   margin-top: 60px;
@@ -2676,6 +2677,27 @@ body {
 .headband {
   height: 0px;
   background: #49b1f5;
+}
+.menu .menu-item a {
+  display: block;
+  font-size: 17px;
+  line-height: initial;
+  border-bottom: 1px solid transparent;
+  transition-property: border-color;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+  transition-delay: 0s;
+}
+a {
+  color: #999;
+  text-decoration: none;
+  outline: none;
+  border-bottom: 1px solid #999;
+  word-wrap: break-word;
+}
+.fa-fw {
+  width: 1.28571429em;
+  text-align: right;
 }
 .post {
   margin-top: 60px;
