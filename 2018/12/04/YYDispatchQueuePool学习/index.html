@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="Object-C,">
 
 
 
@@ -79,18 +79,19 @@
 
 
 
-<meta name="description" content="YYDispatchQueuePool学习目的：解决当用并行队列来执行大量块时，当某个块所在线程被锁住时，并列队列会创建大量线程以至于占用了过多资源而影响到主线程的问题。">
+<meta name="description" content="目的：解决当用并行队列来执行大量块时，当某个块所在线程被锁住时，并列队列会创建大量线程以至于占用了过多资源而影响到主线程的问题。">
+<meta name="keywords" content="Object-C">
 <meta property="og:type" content="article">
 <meta property="og:title" content="YYDispatchQueuePool学习">
 <meta property="og:url" content="http://yoursite.com/2018/12/04/YYDispatchQueuePool学习/index.html">
 <meta property="og:site_name" content="seapeak&#39;s blog">
-<meta property="og:description" content="YYDispatchQueuePool学习目的：解决当用并行队列来执行大量块时，当某个块所在线程被锁住时，并列队列会创建大量线程以至于占用了过多资源而影响到主线程的问题。">
+<meta property="og:description" content="目的：解决当用并行队列来执行大量块时，当某个块所在线程被锁住时，并列队列会创建大量线程以至于占用了过多资源而影响到主线程的问题。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/458529-74ed8a8b44ba56e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-12-04T06:01:41.812Z">
+<meta property="og:updated_time" content="2018-12-04T06:05:24.280Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="YYDispatchQueuePool学习">
-<meta name="twitter:description" content="YYDispatchQueuePool学习目的：解决当用并行队列来执行大量块时，当某个块所在线程被锁住时，并列队列会创建大量线程以至于占用了过多资源而影响到主线程的问题。">
+<meta name="twitter:description" content="目的：解决当用并行队列来执行大量块时，当某个块所在线程被锁住时，并列队列会创建大量线程以至于占用了过多资源而影响到主线程的问题。">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/458529-74ed8a8b44ba56e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -321,7 +322,7 @@
       
 
       
-        <h1 id="YYDispatchQueuePool学习"><a href="#YYDispatchQueuePool学习" class="headerlink" title="YYDispatchQueuePool学习"></a>YYDispatchQueuePool学习</h1><h2 id="目的："><a href="#目的：" class="headerlink" title="目的："></a>目的：</h2><p>解决当用<strong>并行队列</strong>来执行大量块时，当某个块所在线程被锁住时，<strong>并列队列</strong>会创建大量线程以至于占用了过多资源而影响到主线程的问题。<a id="more"></a></p>
+        <h2 id="目的："><a href="#目的：" class="headerlink" title="目的："></a>目的：</h2><p>解决当用<strong>并行队列</strong>来执行大量块时，当某个块所在线程被锁住时，<strong>并列队列</strong>会创建大量线程以至于占用了过多资源而影响到主线程的问题。<a id="more"></a></p>
 <h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p><strong>YYDispatchQueuePool</strong>用一个全局的<strong>串行队列</strong>来尽量控制全局线程数。</p>
 <h2 id="分析源码（TODO-待完善）"><a href="#分析源码（TODO-待完善）" class="headerlink" title="分析源码（TODO:待完善）"></a>分析源码（TODO:待完善）</h2><p>1、首先了解Qos的优先级</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSQualityOfServiceUserInteractive</span> <span class="comment">//与用户交互的任务，这些任务通常跟UI级别的刷新相关，比如动画，这些任务需要在一瞬间完成</span></span><br><span class="line"><span class="built_in">NSQualityOfServiceUserInitiated</span>   <span class="comment">//由用户发起的并且需要立即得到结果的任务，比如滑动scroll view时去加载数据用于后续cell的显示，这些任务通常跟后续的用户交互相关，在几秒或者更短的时间内完成</span></span><br><span class="line"><span class="built_in">NSQualityOfServiceUtility</span>         <span class="comment">//一些可能需要花点时间的任务，这些任务不需要马上返回结果，比如下载的任务，这些任务可能花费几秒或者几分钟的时间 </span></span><br><span class="line"><span class="built_in">NSQualityOfServiceBackground</span>      <span class="comment">//这些任务对用户不可见，比如后台进行备份的操作，这些任务可能需要较长的时间，几分钟甚至几个小时 </span></span><br><span class="line"><span class="built_in">NSQualityOfServiceDefault</span>         <span class="comment">//优先级介于user-initiated 和 utility，当没有 QoS信息时默认使用，开发者不应该使用这个值来设置自己的任务</span></span><br></pre></td></tr></table></figure>
@@ -349,27 +350,17 @@
 
     <footer class="post-footer">
       
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/12/04/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-          </div>
+        <div class="post-tags">
+          
+            <a href="/tags/Object-C/" rel="tag"># Object-C</a>
+          
         </div>
+      
+
+      
+      
+      
+
       
 
       
