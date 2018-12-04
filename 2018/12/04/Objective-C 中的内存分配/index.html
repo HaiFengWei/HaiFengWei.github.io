@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="seapeak&#39;s blog">
 <meta property="og:description" content="在 Objective-C 中，对象通常是使用 alloc 方法在堆上创建的。 [NSObject alloc] 方法会在对堆上分配一块内存，按照NSObject的内部结构填充这块儿内存区域。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-04T06:11:22.409Z">
+<meta property="og:updated_time" content="2018-12-04T06:14:31.986Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Objective-C 中的内存分配">
 <meta name="twitter:description" content="在 Objective-C 中，对象通常是使用 alloc 方法在堆上创建的。 [NSObject alloc] 方法会在对堆上分配一块内存，按照NSObject的内部结构填充这块儿内存区域。">
@@ -322,9 +322,8 @@
       
         <p>在 Objective-C 中，对象通常是使用 alloc 方法在堆上创建的。 [NSObject alloc] 方法会在对堆上分配一块内存，按照NSObject的内部结构填充这块儿内存区域。<a id="more"></a></p>
 <p>一旦对象创建完成，就不可能再移动它了。因为很可能有很多指针都指向这个对象，这些指针并没有被追踪。因此没有办法在移动对象的位置之后更新全部的这些指针。</p>
-<p>##MRC与ARC<br>Objective-C中提供了两种内存管理机制：MRC（MannulReference Counting）和 ARC(Automatic Reference Counting)，分别提供对内存的手动和自动管理，来满足不同的需求。现在苹果推荐使用 ARC 来进行内存管理。</p>
-<p>##MRC</p>
-<table>
+<h2 id="MRC与ARC"><a href="#MRC与ARC" class="headerlink" title="MRC与ARC"></a>MRC与ARC</h2><p>Objective-C中提供了两种内存管理机制：MRC（MannulReference Counting）和 ARC(Automatic Reference Counting)，分别提供对内存的手动和自动管理，来满足不同的需求。现在苹果推荐使用 ARC 来进行内存管理。</p>
+<h2 id="MRC"><a href="#MRC" class="headerlink" title="MRC"></a>MRC</h2><table>
 <thead>
 <tr>
 <th style="text-align:center">对象操作</th>
@@ -355,18 +354,16 @@
 </tr>
 </tbody>
 </table>
-<p>###四个法则</p>
-<ul>
+<h3 id="四个法则"><a href="#四个法则" class="headerlink" title="四个法则"></a>四个法则</h3><ul>
 <li>自己生成的对象，自己持有。</li>
 <li>非自己生成的对象，自己也能持有。</li>
 <li>不在需要自己持有对象的时候，释放。</li>
 <li>非自己持有的对象无需释放。</li>
 </ul>
-<p>###Autorelease<br><code>autorelease</code>使得对象在超出生命周期后能正确的被释放(通过调用<code>release</code>方法)。在调用<code>release</code>后，对象会被立即释放，而调用<code>autorelease</code>后，对象不会被立即释放，而是注册到<code>autoreleasepool</code>中，经过一段时间后<code>pool</code>结束，此时调用<code>release</code>方法，对象被释放。</p>
-<p>###MRC变量管理方法<br>在MRC的内存管理模式下，与对变量的管理相关的方法有：<code>retain</code>,<code>release</code>和<code>autorelease</code>。<code>retain</code>和<code>release</code>方法操作的是引用记数，当引用记数为零时，便自动释放内存。并且可以用 NSAutoreleasePool 对象，对加入自动释放池（autorelease 调用）的变量进行管理，当 drain 时回收内存。</p>
-<p>##ARC<br>ARC 是苹果引入的一种自动内存管理机制，会根据引用计数自动监视对象的生存周期，实现方式是在编译时期自动在已有代码中插入合适的内存管理代码以及在 Runtime 做一些优化。</p>
-<p>###ARC变量标识符</p>
-<ul>
+<h3 id="Autorelease"><a href="#Autorelease" class="headerlink" title="Autorelease"></a>Autorelease</h3><p><code>autorelease</code>使得对象在超出生命周期后能正确的被释放(通过调用<code>release</code>方法)。在调用<code>release</code>后，对象会被立即释放，而调用<code>autorelease</code>后，对象不会被立即释放，而是注册到<code>autoreleasepool</code>中，经过一段时间后<code>pool</code>结束，此时调用<code>release</code>方法，对象被释放。</p>
+<h3 id="MRC变量管理方法"><a href="#MRC变量管理方法" class="headerlink" title="MRC变量管理方法"></a>MRC变量管理方法</h3><p>在MRC的内存管理模式下，与对变量的管理相关的方法有：<code>retain</code>,<code>release</code>和<code>autorelease</code>。<code>retain</code>和<code>release</code>方法操作的是引用记数，当引用记数为零时，便自动释放内存。并且可以用 NSAutoreleasePool 对象，对加入自动释放池（autorelease 调用）的变量进行管理，当 drain 时回收内存。</p>
+<h2 id="ARC"><a href="#ARC" class="headerlink" title="ARC"></a>ARC</h2><p>ARC 是苹果引入的一种自动内存管理机制，会根据引用计数自动监视对象的生存周期，实现方式是在编译时期自动在已有代码中插入合适的内存管理代码以及在 Runtime 做一些优化。</p>
+<h3 id="ARC变量标识符"><a href="#ARC变量标识符" class="headerlink" title="ARC变量标识符"></a>ARC变量标识符</h3><ul>
 <li><code>__strong</code></li>
 <li><code>__weak</code></li>
 <li><code>__unsafe_unretained</code></li>
@@ -378,7 +375,7 @@
 <p><code>__autoreleasing</code>用于标示使用引用传值的参数<code>（id *）</code>，在函数返回时会被自动释放掉。</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Number* __<span class="keyword">strong</span> num = [[Number alloc] init];</span><br></pre></td></tr></table></figure>
 <p>注意 __strong 的位置应该放到 * 和变量名中间，放到其他的位置严格意义上说是不正确的，只不过编译器不会报错。</p>
-<p>###ARC属性标识符<br>类中的属性也可以加上标志符：</p>
+<h3 id="ARC属性标识符"><a href="#ARC属性标识符" class="headerlink" title="ARC属性标识符"></a>ARC属性标识符</h3><p>类中的属性也可以加上标志符：</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@property</span> (<span class="keyword">assign</span>/<span class="keyword">retain</span>/<span class="keyword">strong</span>/<span class="keyword">weak</span>/<span class="keyword">unsafe_unretained</span>/<span class="keyword">copy</span>) Number* num</span><br></pre></td></tr></table></figure>
 <p><code>assign</code>表明<code>setter</code>仅仅是一个简单的赋值操作，通常用于基本的数值类型，例如<code>CGFloat</code>和<code>NSInteger</code>。</p>
 <p><code>strong</code>表明属性定义一个拥有者关系。当给属性设定一个新值的时候，首先这个值进行<code>retain</code>，旧值进行<code>release</code>，然后进行赋值操作。</p>
@@ -424,10 +421,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/12/04/GCD/" rel="prev" title="GCD">
-                GCD <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>

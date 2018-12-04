@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Dispatch Queue（队列）是一个对象，类似队列的数据结构，而且是 FIFO(First In, First Out)队列，因此任务开始执行的顺序，就是你把它们放到 queue 中的顺序。 ##GCD 中的队列类型可分为三种：  Serial Queue（串行队列） 串行队列中任务会按照添加到 queue 中的顺序一个一个执行。串行队列在前一个任务执行之前，后一个任务是被阻塞的，正因为如此">
+<meta name="description" content="Dispatch Queue（队列）是一个对象，类似队列的数据结构，而且是 FIFO(First In, First Out)队列，因此任务开始执行的顺序，就是你把它们放到 queue 中的顺序。 GCD 中的队列类型可分为三种： Serial Queue（串行队列） 串行队列中任务会按照添加到 queue 中的顺序一个一个执行。串行队列在前一个任务执行之前，后一个任务是被阻塞的，正因为如此，它们">
 <meta name="keywords" content="Object-C">
 <meta property="og:type" content="article">
 <meta property="og:title" content="GCD">
 <meta property="og:url" content="http://yoursite.com/2018/12/04/GCD/index.html">
 <meta property="og:site_name" content="seapeak&#39;s blog">
-<meta property="og:description" content="Dispatch Queue（队列）是一个对象，类似队列的数据结构，而且是 FIFO(First In, First Out)队列，因此任务开始执行的顺序，就是你把它们放到 queue 中的顺序。 ##GCD 中的队列类型可分为三种：  Serial Queue（串行队列） 串行队列中任务会按照添加到 queue 中的顺序一个一个执行。串行队列在前一个任务执行之前，后一个任务是被阻塞的，正因为如此">
+<meta property="og:description" content="Dispatch Queue（队列）是一个对象，类似队列的数据结构，而且是 FIFO(First In, First Out)队列，因此任务开始执行的顺序，就是你把它们放到 queue 中的顺序。 GCD 中的队列类型可分为三种： Serial Queue（串行队列） 串行队列中任务会按照添加到 queue 中的顺序一个一个执行。串行队列在前一个任务执行之前，后一个任务是被阻塞的，正因为如此，它们">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-04T06:11:28.309Z">
+<meta property="og:updated_time" content="2018-12-04T06:14:07.306Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="GCD">
-<meta name="twitter:description" content="Dispatch Queue（队列）是一个对象，类似队列的数据结构，而且是 FIFO(First In, First Out)队列，因此任务开始执行的顺序，就是你把它们放到 queue 中的顺序。 ##GCD 中的队列类型可分为三种：  Serial Queue（串行队列） 串行队列中任务会按照添加到 queue 中的顺序一个一个执行。串行队列在前一个任务执行之前，后一个任务是被阻塞的，正因为如此">
+<meta name="twitter:description" content="Dispatch Queue（队列）是一个对象，类似队列的数据结构，而且是 FIFO(First In, First Out)队列，因此任务开始执行的顺序，就是你把它们放到 queue 中的顺序。 GCD 中的队列类型可分为三种： Serial Queue（串行队列） 串行队列中任务会按照添加到 queue 中的顺序一个一个执行。串行队列在前一个任务执行之前，后一个任务是被阻塞的，正因为如此，它们">
 
 
 
@@ -321,24 +321,19 @@
 
       
         <p><strong>Dispatch Queue（队列）</strong>是一个对象，类似队列的数据结构，而且是 FIFO(First In, First Out)队列，因此任务开始执行的顺序，就是你把它们放到 queue 中的顺序。</p>
-<p>##GCD 中的队列类型可分为三种：</p>
-<ol>
+<h2 id="GCD-中的队列类型可分为三种："><a href="#GCD-中的队列类型可分为三种：" class="headerlink" title="GCD 中的队列类型可分为三种："></a>GCD 中的队列类型可分为三种：</h2><ol>
 <li><strong>Serial Queue（串行队列）</strong> 串行队列中任务会按照添加到 queue 中的顺序一个一个执行。串行队列在前一个任务执行之前，后一个任务是被阻塞的，正因为如此，它们可以用来完成同步机制。</li>
 <li><strong>Concurrent Queue(并行队列):</strong> 并行队列，可以并发地执行多个任务，但是任务开始的顺序仍然是按照被添加到队列中的顺序。具体任务执行的线程和任务执行的并发数，都是由 GCD 进行管理的</li>
 <li><strong>Main Dispatch Queue（主队列）：</strong> 主队列是一个全局可见的串行队列，其中的任务会在主线程中执行。主队列通过与应用程序的 runloop 交互，把任务安插到 runloop 当中执行。因为主队列比较特殊，其中的任务确定会在主线程中执行，通常主队列会被用作同步的作用<a id="more"></a></li>
 </ol>
-<p>##获取队列</p>
-<p>###1.系统默认不提供串行队列，需要我们手动创建（<strong>Main Dispatch Queue</strong>是特殊串行队列除外）</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dispatch_queue_t</span> queue;</span><br><span class="line">queue = dispatch_queue_create(<span class="string">"com.sepeak.serialQueue"</span>, <span class="literal">NULL</span>); <span class="comment">// OS X 10.7 和 iOS 4.3 之前</span></span><br><span class="line">queue = dispatch_queue_create(<span class="string">"com.sepeak.serialQueue"</span>,  DISPATCH_QUEUE_SERIAL); <span class="comment">// 之后</span></span><br></pre></td></tr></table></figure>
-<p>####2. 获取并行队列(可获取系统提供全局并行队列或者手动创建)</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> 获取全局并行队列：</span></span><br><span class="line"><span class="comment"> 系统默认提供了四个全局可用的并行队列，其优先级不同，分别为</span></span><br><span class="line"><span class="comment"> QOS_CLASS_USER_INTERACTIVE</span></span><br><span class="line"><span class="comment"> QOS_CLASS_USER_INITIATED</span></span><br><span class="line"><span class="comment"> QOS_CLASS_UTILITY</span></span><br><span class="line"><span class="comment"> QOS_CLASS_BACKGROUND</span></span><br><span class="line"><span class="comment"> 优先级依次降低。优先级越高的队列中的任务会更早执行</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> DISPATCH_QUEUE_PRIORITY_HIGH</span></span><br><span class="line"><span class="comment"> DISPATCH_QUEUE_PRIORITY_DEFAULT</span></span><br><span class="line"><span class="comment"> DISPATCH_QUEUE_PRIORITY_LOW</span></span><br><span class="line"><span class="comment"> DISPATCH_QUEUE_PRIORITY_BACKGROUND</span></span><br><span class="line"><span class="comment"> 这些值映射为一个适合QOS的级别</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="built_in">dispatch_queue_t</span> globalQueue = dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 手动创建队列 */</span></span><br><span class="line"><span class="built_in">dispatch_queue_t</span> concurrentQueue = dispatch_queue_create(<span class="string">"com.sepeak.concurrentQueue"</span>, DISPATCH_QUEUE_CONCURRENT);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 设置concurrentQueue和globalQueue的优先级一样 */</span></span><br><span class="line">dispatch_set_target_queue(concurrentQueue, globalQueue);</span><br></pre></td></tr></table></figure>
-<p>###获取主线程队列dispatch_get_main_queue()<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dispatch_queue_t</span> mianQueue = dispatch_get_main_queue();</span><br></pre></td></tr></table></figure></p>
-<p>###手动创建队列和系统创建队列区别：<br>事实上，我们自己创建的队列，最终会把任务分配到系统提供的主队列和四个全局的并行队列上，这种操作叫做 Target queues。具体来说，我们创建的串行队列的 target queue 就是系统的主队列，我们创建的并行队列的 target queue 默认是系统 default 优先级的全局并行队列。所有放在我们创建的队列中的任务，最终都会到 target queue 中完成真正的执行</p>
+<h2 id="获取队列"><a href="#获取队列" class="headerlink" title="获取队列"></a>获取队列</h2><h3 id="1-系统默认不提供串行队列，需要我们手动创建（Main-Dispatch-Queue是特殊串行队列除外）"><a href="#1-系统默认不提供串行队列，需要我们手动创建（Main-Dispatch-Queue是特殊串行队列除外）" class="headerlink" title="1.系统默认不提供串行队列，需要我们手动创建（Main Dispatch Queue是特殊串行队列除外）"></a>1.系统默认不提供串行队列，需要我们手动创建（<strong>Main Dispatch Queue</strong>是特殊串行队列除外）</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dispatch_queue_t</span> queue;</span><br><span class="line">queue = dispatch_queue_create(<span class="string">"com.sepeak.serialQueue"</span>, <span class="literal">NULL</span>); <span class="comment">// OS X 10.7 和 iOS 4.3 之前</span></span><br><span class="line">queue = dispatch_queue_create(<span class="string">"com.sepeak.serialQueue"</span>,  DISPATCH_QUEUE_SERIAL); <span class="comment">// 之后</span></span><br></pre></td></tr></table></figure>
+<h4 id="2-获取并行队列-可获取系统提供全局并行队列或者手动创建"><a href="#2-获取并行队列-可获取系统提供全局并行队列或者手动创建" class="headerlink" title="2. 获取并行队列(可获取系统提供全局并行队列或者手动创建)"></a>2. 获取并行队列(可获取系统提供全局并行队列或者手动创建)</h4><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> 获取全局并行队列：</span></span><br><span class="line"><span class="comment"> 系统默认提供了四个全局可用的并行队列，其优先级不同，分别为</span></span><br><span class="line"><span class="comment"> QOS_CLASS_USER_INTERACTIVE</span></span><br><span class="line"><span class="comment"> QOS_CLASS_USER_INITIATED</span></span><br><span class="line"><span class="comment"> QOS_CLASS_UTILITY</span></span><br><span class="line"><span class="comment"> QOS_CLASS_BACKGROUND</span></span><br><span class="line"><span class="comment"> 优先级依次降低。优先级越高的队列中的任务会更早执行</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> DISPATCH_QUEUE_PRIORITY_HIGH</span></span><br><span class="line"><span class="comment"> DISPATCH_QUEUE_PRIORITY_DEFAULT</span></span><br><span class="line"><span class="comment"> DISPATCH_QUEUE_PRIORITY_LOW</span></span><br><span class="line"><span class="comment"> DISPATCH_QUEUE_PRIORITY_BACKGROUND</span></span><br><span class="line"><span class="comment"> 这些值映射为一个适合QOS的级别</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="built_in">dispatch_queue_t</span> globalQueue = dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 手动创建队列 */</span></span><br><span class="line"><span class="built_in">dispatch_queue_t</span> concurrentQueue = dispatch_queue_create(<span class="string">"com.sepeak.concurrentQueue"</span>, DISPATCH_QUEUE_CONCURRENT);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 设置concurrentQueue和globalQueue的优先级一样 */</span></span><br><span class="line">dispatch_set_target_queue(concurrentQueue, globalQueue);</span><br></pre></td></tr></table></figure>
+<h3 id="获取主线程队列dispatch-get-main-queue"><a href="#获取主线程队列dispatch-get-main-queue" class="headerlink" title="获取主线程队列dispatch_get_main_queue()"></a>获取主线程队列dispatch_get_main_queue()</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dispatch_queue_t</span> mianQueue = dispatch_get_main_queue();</span><br></pre></td></tr></table></figure>
+<h3 id="手动创建队列和系统创建队列区别："><a href="#手动创建队列和系统创建队列区别：" class="headerlink" title="手动创建队列和系统创建队列区别："></a>手动创建队列和系统创建队列区别：</h3><p>事实上，我们自己创建的队列，最终会把任务分配到系统提供的主队列和四个全局的并行队列上，这种操作叫做 Target queues。具体来说，我们创建的串行队列的 target queue 就是系统的主队列，我们创建的并行队列的 target queue 默认是系统 default 优先级的全局并行队列。所有放在我们创建的队列中的任务，最终都会到 target queue 中完成真正的执行</p>
 <p>通常情况下，对于串行队列，我们应该自己创建，对于并行队列，就直接使用系统提供的 Default 优先级的 queue。</p>
-<p>###创建的 Queue 释放问题<br>在 iOS 6 系统把<code>dispatch queue</code>纳入了 ARC 管理的范围，就不需要我们进行手动管理了。把<code>dispatch queue</code>从原来的非 OC 对象（原生 C 指针），变成了 OC 对象,就需要使用<code>strong</code>或者<code>weak</code>来修饰</p>
+<h3 id="创建的-Queue-释放问题"><a href="#创建的-Queue-释放问题" class="headerlink" title="创建的 Queue 释放问题"></a>创建的 Queue 释放问题</h3><p>在 iOS 6 系统把<code>dispatch queue</code>纳入了 ARC 管理的范围，就不需要我们进行手动管理了。把<code>dispatch queue</code>从原来的非 OC 对象（原生 C 指针），变成了 OC 对象,就需要使用<code>strong</code>或者<code>weak</code>来修饰</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">dispatch_queue_t</span> queue;</span><br></pre></td></tr></table></figure>
-<p>###执行方式</p>
-<ol>
+<h3 id="执行方式"><a href="#执行方式" class="headerlink" title="执行方式"></a>执行方式</h3><ol>
 <li><p>同步执行（sync）</p>
 <ul>
 <li><p>同步添加任务到指定的队列中，在添加的任务执行结束之前，会一直等待，直到队列里面的任务完成之后再继续执行。</p>
@@ -356,10 +351,9 @@
 </ul>
 </li>
 </ol>
-<p>###执行任务<br>给 queue 添加任务有两种方式，同步和异步。同步方式会阻塞当前线程的执行，等待添加的任务执行完毕之后，才继续向下执行。异步方式不会阻塞当前线程的执行。</p>
+<h3 id="执行任务"><a href="#执行任务" class="headerlink" title="执行任务"></a>执行任务</h3><p>给 queue 添加任务有两种方式，同步和异步。同步方式会阻塞当前线程的执行，等待添加的任务执行完毕之后，才继续向下执行。异步方式不会阻塞当前线程的执行。</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dispatch_queue_t</span> queue;</span><br><span class="line">queue = dispatch_queue_create(<span class="string">"com.sepeak.serialQueue"</span>,  DISPATCH_QUEUE_SERIAL);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 异步添加</span></span><br><span class="line"><span class="comment">/** 不会阻塞线程，将任务添加到queue队列中，直接继续执行主线程 */</span></span><br><span class="line"><span class="built_in">dispatch_async</span>(queue, ^&#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"异步添加任务--%@\n"</span>,[<span class="built_in">NSThread</span> currentThread]);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"第一个 block 可能还没有执行--%@\n"</span>,[<span class="built_in">NSThread</span> currentThread]);</span><br><span class="line"><span class="comment">// 同步添加</span></span><br><span class="line"><span class="comment">/** 会阻塞线程，将任务添加到queue队列中，等待任务在queue队列完成后继续执行主线程 */</span></span><br><span class="line"><span class="built_in">dispatch_sync</span>(queue, ^&#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"同步添加任务--%@\n"</span>,[<span class="built_in">NSThread</span> currentThread]);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"两个 block 都已经执行完毕--%@\n"</span>,[<span class="built_in">NSThread</span> currentThread]);</span><br></pre></td></tr></table></figure>
-<p>#####注意事项</p>
-<ul>
+<h5 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h5><ul>
 <li>同步和异步添加，与队列是串行队列和并行队列没有关系。可以同步地给并行队列添加任务，也可以异步地给串行队列添加任务。同步和异步添加只影响是不是阻塞当前线程，和任务的串行或并行执行没有关系</li>
 <li>如果在任务 block 中创建了大量对象，可以考虑在 block 中添加 autorelease pool。尽管每个 queue 自身都会有 autorelease pool 来管理内存，但是 pool 进行 drain 的具体时间是没办法确定的。如果应用对于内存占用比较敏感，可以自己创建 autorelease pool 来进行内存管理。</li>
 </ul>
@@ -393,15 +387,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/12/04/Objective-C 中的内存分配/" rel="next" title="Objective-C 中的内存分配">
-                <i class="fa fa-chevron-left"></i> Objective-C 中的内存分配
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/04/YYDispatchQueuePool学习/" rel="prev" title="YYDispatchQueuePool学习">
+                YYDispatchQueuePool学习 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
