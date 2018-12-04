@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Dispatch Queue（队列）是一个对象，类似队列的数据结构，而且是 FIFO(First In, First Out)队列，因此任务开始执行的顺序，就是你把它们放到 queue 中的顺序。 GCD 中的队列类型可分为三种： Serial Queue（串行队列） 串行队列中任务会按照添加到 queue 中的顺序一个一个执行。串行队列在前一个任务执行之前，后一个任务是被阻塞的，正因为如此，它们">
+<meta name="description" content="Dispatch Queue（队列）是一个对象，类似队列的数据结构，而且是 FIFO(First In, First Out)队列，因此任务开始执行的顺序，就是你把它们放到 queue 中的顺序。">
 <meta name="keywords" content="Object-C,多线程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GCD">
-<meta property="og:url" content="http://yoursite.com/2018/12/04/GCD/index.html">
+<meta property="og:title" content="GCD简介">
+<meta property="og:url" content="http://yoursite.com/2018/08/20/GCD/index.html">
 <meta property="og:site_name" content="Seapeak&#39;s blogs">
-<meta property="og:description" content="Dispatch Queue（队列）是一个对象，类似队列的数据结构，而且是 FIFO(First In, First Out)队列，因此任务开始执行的顺序，就是你把它们放到 queue 中的顺序。 GCD 中的队列类型可分为三种： Serial Queue（串行队列） 串行队列中任务会按照添加到 queue 中的顺序一个一个执行。串行队列在前一个任务执行之前，后一个任务是被阻塞的，正因为如此，它们">
+<meta property="og:description" content="Dispatch Queue（队列）是一个对象，类似队列的数据结构，而且是 FIFO(First In, First Out)队列，因此任务开始执行的顺序，就是你把它们放到 queue 中的顺序。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-04T12:39:45.607Z">
+<meta property="og:updated_time" content="2018-12-04T14:20:30.141Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GCD">
-<meta name="twitter:description" content="Dispatch Queue（队列）是一个对象，类似队列的数据结构，而且是 FIFO(First In, First Out)队列，因此任务开始执行的顺序，就是你把它们放到 queue 中的顺序。 GCD 中的队列类型可分为三种： Serial Queue（串行队列） 串行队列中任务会按照添加到 queue 中的顺序一个一个执行。串行队列在前一个任务执行之前，后一个任务是被阻塞的，正因为如此，它们">
+<meta name="twitter:title" content="GCD简介">
+<meta name="twitter:description" content="Dispatch Queue（队列）是一个对象，类似队列的数据结构，而且是 FIFO(First In, First Out)队列，因此任务开始执行的顺序，就是你把它们放到 queue 中的顺序。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/12/04/GCD/">
+  <link rel="canonical" href="http://yoursite.com/2018/08/20/GCD/">
 
 
 
 
 
-  <title>GCD | Seapeak's blogs</title>
+  <title>GCD简介 | Seapeak's blogs</title>
   
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/04/GCD/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/20/GCD/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Seapeak">
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">GCD</h1>
+          <h1 class="post-title" itemprop="name headline">GCD简介</h1>
         
 
         <div class="post-meta">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-04T11:19:23+08:00">
-                2018-12-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-20T11:19:23+08:00">
+                2018-08-20
               </time>
             
 
@@ -323,8 +323,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/12/04/GCD/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/04/GCD/" itemprop="commentCount"></span>
+                <a href="/2018/08/20/GCD/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/08/20/GCD/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -352,11 +352,11 @@
       
 
       
-        <p><strong>Dispatch Queue（队列）</strong>是一个对象，类似队列的数据结构，而且是 FIFO(First In, First Out)队列，因此任务开始执行的顺序，就是你把它们放到 queue 中的顺序。</p>
+        <p><strong>Dispatch Queue（队列）</strong>是一个对象，类似队列的数据结构，而且是 FIFO(First In, First Out)队列，因此任务开始执行的顺序，就是你把它们放到 queue 中的顺序。<a id="more"></a></p>
 <h2 id="GCD-中的队列类型可分为三种："><a href="#GCD-中的队列类型可分为三种：" class="headerlink" title="GCD 中的队列类型可分为三种："></a>GCD 中的队列类型可分为三种：</h2><ol>
 <li><strong>Serial Queue（串行队列）</strong> 串行队列中任务会按照添加到 queue 中的顺序一个一个执行。串行队列在前一个任务执行之前，后一个任务是被阻塞的，正因为如此，它们可以用来完成同步机制。</li>
 <li><strong>Concurrent Queue(并行队列):</strong> 并行队列，可以并发地执行多个任务，但是任务开始的顺序仍然是按照被添加到队列中的顺序。具体任务执行的线程和任务执行的并发数，都是由 GCD 进行管理的</li>
-<li><strong>Main Dispatch Queue（主队列）：</strong> 主队列是一个全局可见的串行队列，其中的任务会在主线程中执行。主队列通过与应用程序的 runloop 交互，把任务安插到 runloop 当中执行。因为主队列比较特殊，其中的任务确定会在主线程中执行，通常主队列会被用作同步的作用<a id="more"></a></li>
+<li><strong>Main Dispatch Queue（主队列）：</strong> 主队列是一个全局可见的串行队列，其中的任务会在主线程中执行。主队列通过与应用程序的 runloop 交互，把任务安插到 runloop 当中执行。因为主队列比较特殊，其中的任务确定会在主线程中执行，通常主队列会被用作同步的作用</li>
 </ol>
 <h2 id="获取队列"><a href="#获取队列" class="headerlink" title="获取队列"></a>获取队列</h2><h3 id="1-系统默认不提供串行队列，需要我们手动创建（Main-Dispatch-Queue是特殊串行队列除外）"><a href="#1-系统默认不提供串行队列，需要我们手动创建（Main-Dispatch-Queue是特殊串行队列除外）" class="headerlink" title="1.系统默认不提供串行队列，需要我们手动创建（Main Dispatch Queue是特殊串行队列除外）"></a>1.系统默认不提供串行队列，需要我们手动创建（<strong>Main Dispatch Queue</strong>是特殊串行队列除外）</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dispatch_queue_t</span> queue;</span><br><span class="line">queue = dispatch_queue_create(<span class="string">"com.sepeak.serialQueue"</span>, <span class="literal">NULL</span>); <span class="comment">// OS X 10.7 和 iOS 4.3 之前</span></span><br><span class="line">queue = dispatch_queue_create(<span class="string">"com.sepeak.serialQueue"</span>,  DISPATCH_QUEUE_SERIAL); <span class="comment">// 之后</span></span><br></pre></td></tr></table></figure>
 <h4 id="2-获取并行队列-可获取系统提供全局并行队列或者手动创建"><a href="#2-获取并行队列-可获取系统提供全局并行队列或者手动创建" class="headerlink" title="2. 获取并行队列(可获取系统提供全局并行队列或者手动创建)"></a>2. 获取并行队列(可获取系统提供全局并行队列或者手动创建)</h4><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> 获取全局并行队列：</span></span><br><span class="line"><span class="comment"> 系统默认提供了四个全局可用的并行队列，其优先级不同，分别为</span></span><br><span class="line"><span class="comment"> QOS_CLASS_USER_INTERACTIVE</span></span><br><span class="line"><span class="comment"> QOS_CLASS_USER_INITIATED</span></span><br><span class="line"><span class="comment"> QOS_CLASS_UTILITY</span></span><br><span class="line"><span class="comment"> QOS_CLASS_BACKGROUND</span></span><br><span class="line"><span class="comment"> 优先级依次降低。优先级越高的队列中的任务会更早执行</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> DISPATCH_QUEUE_PRIORITY_HIGH</span></span><br><span class="line"><span class="comment"> DISPATCH_QUEUE_PRIORITY_DEFAULT</span></span><br><span class="line"><span class="comment"> DISPATCH_QUEUE_PRIORITY_LOW</span></span><br><span class="line"><span class="comment"> DISPATCH_QUEUE_PRIORITY_BACKGROUND</span></span><br><span class="line"><span class="comment"> 这些值映射为一个适合QOS的级别</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="built_in">dispatch_queue_t</span> globalQueue = dispatch_get_global_queue(QOS_CLASS_USER_INTERACTIVE, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 手动创建队列 */</span></span><br><span class="line"><span class="built_in">dispatch_queue_t</span> concurrentQueue = dispatch_queue_create(<span class="string">"com.sepeak.concurrentQueue"</span>, DISPATCH_QUEUE_CONCURRENT);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 设置concurrentQueue和globalQueue的优先级一样 */</span></span><br><span class="line">dispatch_set_target_queue(concurrentQueue, globalQueue);</span><br></pre></td></tr></table></figure>
@@ -421,13 +421,17 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/08/16/YYDispatchQueuePool学习/" rel="next" title="YYDispatchQueuePool阅读">
+                <i class="fa fa-chevron-left"></i> YYDispatchQueuePool阅读
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/12/04/Objective-C 中的内存分配/" rel="prev" title="Objective-C 中的内存分配">
+              <a href="/2018/10/05/Objective-C 中的内存分配/" rel="prev" title="Objective-C 中的内存分配">
                 Objective-C 中的内存分配 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -622,9 +626,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/12/04/GCD/';
-          this.page.identifier = '2018/12/04/GCD/';
-          this.page.title = 'GCD';
+          this.page.url = 'http://yoursite.com/2018/08/20/GCD/';
+          this.page.identifier = '2018/08/20/GCD/';
+          this.page.title = 'GCD简介';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://seapeak.disqus.com/embed.js';

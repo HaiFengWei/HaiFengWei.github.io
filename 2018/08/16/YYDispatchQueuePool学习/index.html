@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Object-C,内存,">
+  <meta name="keywords" content="Object-C,多线程,">
 
 
 
@@ -79,18 +79,20 @@
 
 
 
-<meta name="description" content="在 Objective-C 中，对象通常是使用 alloc 方法在堆上创建的。 [NSObject alloc] 方法会在对堆上分配一块内存，按照NSObject的内部结构填充这块儿内存区域。">
-<meta name="keywords" content="Object-C,内存">
+<meta name="description" content="目的：解决当用并行队列来执行大量块时，当某个块所在线程被锁住时，并列队列会创建大量线程以至于占用了过多资源而影响到主线程的问题。">
+<meta name="keywords" content="Object-C,多线程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Objective-C 中的内存分配">
-<meta property="og:url" content="http://yoursite.com/2018/12/04/Objective-C 中的内存分配/index.html">
+<meta property="og:title" content="YYDispatchQueuePool阅读">
+<meta property="og:url" content="http://yoursite.com/2018/08/16/YYDispatchQueuePool学习/index.html">
 <meta property="og:site_name" content="Seapeak&#39;s blogs">
-<meta property="og:description" content="在 Objective-C 中，对象通常是使用 alloc 方法在堆上创建的。 [NSObject alloc] 方法会在对堆上分配一块内存，按照NSObject的内部结构填充这块儿内存区域。">
+<meta property="og:description" content="目的：解决当用并行队列来执行大量块时，当某个块所在线程被锁住时，并列队列会创建大量线程以至于占用了过多资源而影响到主线程的问题。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-04T12:39:14.194Z">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/458529-74ed8a8b44ba56e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-12-04T14:20:15.771Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Objective-C 中的内存分配">
-<meta name="twitter:description" content="在 Objective-C 中，对象通常是使用 alloc 方法在堆上创建的。 [NSObject alloc] 方法会在对堆上分配一块内存，按照NSObject的内部结构填充这块儿内存区域。">
+<meta name="twitter:title" content="YYDispatchQueuePool阅读">
+<meta name="twitter:description" content="目的：解决当用并行队列来执行大量块时，当某个块所在线程被锁住时，并列队列会创建大量线程以至于占用了过多资源而影响到主线程的问题。">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/458529-74ed8a8b44ba56e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -120,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/12/04/Objective-C 中的内存分配/">
+  <link rel="canonical" href="http://yoursite.com/2018/08/16/YYDispatchQueuePool学习/">
 
 
 
 
 
-  <title>Objective-C 中的内存分配 | Seapeak's blogs</title>
+  <title>YYDispatchQueuePool阅读 | Seapeak's blogs</title>
   
 
 
@@ -253,7 +255,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/04/Objective-C 中的内存分配/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/16/YYDispatchQueuePool学习/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Seapeak">
@@ -270,7 +272,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Objective-C 中的内存分配</h1>
+          <h1 class="post-title" itemprop="name headline">YYDispatchQueuePool阅读</h1>
         
 
         <div class="post-meta">
@@ -282,8 +284,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-04T11:19:23+08:00">
-                2018-12-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-16T11:19:23+08:00">
+                2018-08-16
               </time>
             
 
@@ -323,8 +325,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/12/04/Objective-C 中的内存分配/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/04/Objective-C 中的内存分配/" itemprop="commentCount"></span>
+                <a href="/2018/08/16/YYDispatchQueuePool学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/08/16/YYDispatchQueuePool学习/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -352,69 +354,20 @@
       
 
       
-        <p>在 Objective-C 中，对象通常是使用 alloc 方法在堆上创建的。 [NSObject alloc] 方法会在对堆上分配一块内存，按照NSObject的内部结构填充这块儿内存区域。<a id="more"></a></p>
-<p>一旦对象创建完成，就不可能再移动它了。因为很可能有很多指针都指向这个对象，这些指针并没有被追踪。因此没有办法在移动对象的位置之后更新全部的这些指针。</p>
-<h2 id="MRC与ARC"><a href="#MRC与ARC" class="headerlink" title="MRC与ARC"></a>MRC与ARC</h2><p>Objective-C中提供了两种内存管理机制：MRC（MannulReference Counting）和 ARC(Automatic Reference Counting)，分别提供对内存的手动和自动管理，来满足不同的需求。现在苹果推荐使用 ARC 来进行内存管理。</p>
-<h2 id="MRC"><a href="#MRC" class="headerlink" title="MRC"></a>MRC</h2><table>
-<thead>
-<tr>
-<th style="text-align:center">对象操作</th>
-<th style="text-align:center">OC中对应的方法</th>
-<th style="text-align:center">对应的 retainCount 变化</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">生成并持有对象</td>
-<td style="text-align:center">alloc/new/copy/mutableCopy等</td>
-<td style="text-align:center">+1</td>
-</tr>
-<tr>
-<td style="text-align:center">持有对象</td>
-<td style="text-align:center">retain</td>
-<td style="text-align:center">+1</td>
-</tr>
-<tr>
-<td style="text-align:center">释放对象</td>
-<td style="text-align:center">release</td>
-<td style="text-align:center">-1</td>
-</tr>
-<tr>
-<td style="text-align:center">废弃对象</td>
-<td style="text-align:center">dealloc</td>
-<td style="text-align:center">-</td>
-</tr>
-</tbody>
-</table>
-<h3 id="四个法则"><a href="#四个法则" class="headerlink" title="四个法则"></a>四个法则</h3><ul>
-<li>自己生成的对象，自己持有。</li>
-<li>非自己生成的对象，自己也能持有。</li>
-<li>不在需要自己持有对象的时候，释放。</li>
-<li>非自己持有的对象无需释放。</li>
-</ul>
-<h3 id="Autorelease"><a href="#Autorelease" class="headerlink" title="Autorelease"></a>Autorelease</h3><p><code>autorelease</code>使得对象在超出生命周期后能正确的被释放(通过调用<code>release</code>方法)。在调用<code>release</code>后，对象会被立即释放，而调用<code>autorelease</code>后，对象不会被立即释放，而是注册到<code>autoreleasepool</code>中，经过一段时间后<code>pool</code>结束，此时调用<code>release</code>方法，对象被释放。</p>
-<h3 id="MRC变量管理方法"><a href="#MRC变量管理方法" class="headerlink" title="MRC变量管理方法"></a>MRC变量管理方法</h3><p>在MRC的内存管理模式下，与对变量的管理相关的方法有：<code>retain</code>,<code>release</code>和<code>autorelease</code>。<code>retain</code>和<code>release</code>方法操作的是引用记数，当引用记数为零时，便自动释放内存。并且可以用 NSAutoreleasePool 对象，对加入自动释放池（autorelease 调用）的变量进行管理，当 drain 时回收内存。</p>
-<h2 id="ARC"><a href="#ARC" class="headerlink" title="ARC"></a>ARC</h2><p>ARC 是苹果引入的一种自动内存管理机制，会根据引用计数自动监视对象的生存周期，实现方式是在编译时期自动在已有代码中插入合适的内存管理代码以及在 Runtime 做一些优化。</p>
-<h3 id="ARC变量标识符"><a href="#ARC变量标识符" class="headerlink" title="ARC变量标识符"></a>ARC变量标识符</h3><ul>
-<li><code>__strong</code></li>
-<li><code>__weak</code></li>
-<li><code>__unsafe_unretained</code></li>
-<li><code>__autoreleasing</code></li>
-</ul>
-<p><code>__strong</code> 是默认使用的标识符。只有还有一个强指针指向某个对象，这个对象就会一直存活。</p>
-<p><code>__weak</code>声明这个引用不会保持被引用对象的存活，如果对象没有强引用了，弱引用会被置为<code>nil</code></p>
-<p><code>__unsafe_unretained</code>声明这个引用不会保持被引用对象的存活，如果对象没有强引用了，它不会被置为 <code>nil</code>。如果它引用的对象被回收掉了，该指针就变成了野指针。</p>
-<p><code>__autoreleasing</code>用于标示使用引用传值的参数<code>（id *）</code>，在函数返回时会被自动释放掉。</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Number* __<span class="keyword">strong</span> num = [[Number alloc] init];</span><br></pre></td></tr></table></figure>
-<p>注意 __strong 的位置应该放到 * 和变量名中间，放到其他的位置严格意义上说是不正确的，只不过编译器不会报错。</p>
-<h3 id="ARC属性标识符"><a href="#ARC属性标识符" class="headerlink" title="ARC属性标识符"></a>ARC属性标识符</h3><p>类中的属性也可以加上标志符：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@property</span> (<span class="keyword">assign</span>/<span class="keyword">retain</span>/<span class="keyword">strong</span>/<span class="keyword">weak</span>/<span class="keyword">unsafe_unretained</span>/<span class="keyword">copy</span>) Number* num</span><br></pre></td></tr></table></figure>
-<p><code>assign</code>表明<code>setter</code>仅仅是一个简单的赋值操作，通常用于基本的数值类型，例如<code>CGFloat</code>和<code>NSInteger</code>。</p>
-<p><code>strong</code>表明属性定义一个拥有者关系。当给属性设定一个新值的时候，首先这个值进行<code>retain</code>，旧值进行<code>release</code>，然后进行赋值操作。</p>
-<p><code>weak</code>表明属性定义了一个非拥有者关系。当给属性设定一个新值的时候，这个值不会进行<code>retain</code>，旧值也不会进行<code>release</code>， 而是进行类似<code>assign</code>的操作。不过当属性指向的对象被销毁时，该属性会被置为<code>nil</code>。</p>
-<p><code>unsafe_unretained</code>的语义和<code>assign</code>类似，不过是用于对象类型的，表示一个非拥有(unretained)的，同时也不会在对象被销毁时置为<code>nil</code>的(unsafe)关系。</p>
-<p><code>copy</code>类似于<code>strong</code>，不过在赋值时进行<code>copy</code>操作而不是<code>retain</code>操作。通常在需要保留某个不可变对象（<code>NSString</code>最常见），并且防止它被意外改变时使用。</p>
-
+        <h2 id="目的："><a href="#目的：" class="headerlink" title="目的："></a>目的：</h2><p>解决当用<strong>并行队列</strong>来执行大量块时，当某个块所在线程被锁住时，<strong>并列队列</strong>会创建大量线程以至于占用了过多资源而影响到主线程的问题。<a id="more"></a></p>
+<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p><strong>YYDispatchQueuePool</strong>用一个全局的<strong>串行队列</strong>来尽量控制全局线程数。</p>
+<h2 id="分析源码（TODO-待完善）"><a href="#分析源码（TODO-待完善）" class="headerlink" title="分析源码（TODO:待完善）"></a>分析源码（TODO:待完善）</h2><p>1、首先了解Qos的优先级</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSQualityOfServiceUserInteractive</span> <span class="comment">//与用户交互的任务，这些任务通常跟UI级别的刷新相关，比如动画，这些任务需要在一瞬间完成</span></span><br><span class="line"><span class="built_in">NSQualityOfServiceUserInitiated</span>   <span class="comment">//由用户发起的并且需要立即得到结果的任务，比如滑动scroll view时去加载数据用于后续cell的显示，这些任务通常跟后续的用户交互相关，在几秒或者更短的时间内完成</span></span><br><span class="line"><span class="built_in">NSQualityOfServiceUtility</span>         <span class="comment">//一些可能需要花点时间的任务，这些任务不需要马上返回结果，比如下载的任务，这些任务可能花费几秒或者几分钟的时间 </span></span><br><span class="line"><span class="built_in">NSQualityOfServiceBackground</span>      <span class="comment">//这些任务对用户不可见，比如后台进行备份的操作，这些任务可能需要较长的时间，几分钟甚至几个小时 </span></span><br><span class="line"><span class="built_in">NSQualityOfServiceDefault</span>         <span class="comment">//优先级介于user-initiated 和 utility，当没有 QoS信息时默认使用，开发者不应该使用这个值来设置自己的任务</span></span><br></pre></td></tr></table></figure>
+<p>Qos与GCD queue优先级对应关系<br><img src="http://upload-images.jianshu.io/upload_images/458529-74ed8a8b44ba56e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>2、了解结构体YYDispatchContext</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span>&#123; </span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span> *name;    <span class="comment">//线程名</span></span><br><span class="line">  <span class="keyword">void</span> **queues;       <span class="comment">//队列数组</span></span><br><span class="line">  uint32_t queueCount; <span class="comment">//队列数目</span></span><br><span class="line">  int32_t counter;     <span class="comment">//自增计数</span></span><br><span class="line">&#125;YYDispatchContext;</span><br></pre></td></tr></table></figure>
+<p>3、如何获取队列</p>
+<p>传入上下文，根据上下文去分配任务，返回<strong>串行队列</strong></p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="built_in">dispatch_queue_t</span> YYDispatchContextGetQueue(YYDispatchContext *context) &#123;</span><br><span class="line">    uint32_t counter = (uint32_t)OSAtomicIncrement32(&amp;context-&gt;counter);</span><br><span class="line">    <span class="keyword">void</span> *queue = context-&gt;queues[counter % context-&gt;queueCount];</span><br><span class="line">    <span class="keyword">return</span> (__bridge <span class="built_in">dispatch_queue_t</span>)(queue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong> OSAtomicIncrement32是自增函数，原子性属于线程安全</p>
+<h2 id="调用示例（TODO-待完善）"><a href="#调用示例（TODO-待完善）" class="headerlink" title="调用示例（TODO:待完善）"></a>调用示例（TODO:待完善）</h2><p>导入头文件<code>#import &quot;YYDispatchQueuePool.h&quot;</code></p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)testYYDispatchQueuePool</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 创建YYDispatchQueuePool实例，设置最大并发数为3</span></span><br><span class="line">    YYDispatchQueuePool *pool = [[YYDispatchQueuePool alloc] initWithName:<span class="string">@"file. testYYDispatchQueuePool"</span> queueCount:<span class="number">3</span> qos:<span class="built_in">NSQualityOfServiceBackground</span>];</span><br><span class="line">    <span class="comment">// 遍历执行任务</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> index = <span class="number">0</span>; index &lt; <span class="number">100</span>; index++) &#123;</span><br><span class="line">        <span class="comment">// 获取队列</span></span><br><span class="line">        <span class="built_in">dispatch_queue_t</span> queue = [pool queue];</span><br><span class="line">        <span class="built_in">dispatch_async</span>(queue, ^&#123;</span><br><span class="line">            <span class="built_in">NSLog</span>(<span class="string">@"index:%d"</span>,index);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="源码链接"><a href="#源码链接" class="headerlink" title="源码链接"></a>源码链接</h2><h4 id="YYDispatchQueuePool"><a href="#YYDispatchQueuePool" class="headerlink" title="YYDispatchQueuePool"></a><a href="https://github.com/ibireme/YYDispatchQueuePool" target="_blank" rel="noopener">YYDispatchQueuePool</a></h4>
       
     </div>
     
@@ -433,7 +386,7 @@
           
             <a href="/tags/Object-C/" rel="tag"># Object-C</a>
           
-            <a href="/tags/内存/" rel="tag"># 内存</a>
+            <a href="/tags/多线程/" rel="tag"># 多线程</a>
           
         </div>
       
@@ -446,18 +399,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/12/04/GCD/" rel="next" title="GCD">
-                <i class="fa fa-chevron-left"></i> GCD
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/12/04/YYDispatchQueuePool学习/" rel="prev" title="YYDispatchQueuePool学习">
-                YYDispatchQueuePool学习 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/08/20/GCD/" rel="prev" title="GCD简介">
+                GCD简介 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -651,9 +600,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/12/04/Objective-C 中的内存分配/';
-          this.page.identifier = '2018/12/04/Objective-C 中的内存分配/';
-          this.page.title = 'Objective-C 中的内存分配';
+          this.page.url = 'http://yoursite.com/2018/08/16/YYDispatchQueuePool学习/';
+          this.page.identifier = '2018/08/16/YYDispatchQueuePool学习/';
+          this.page.title = 'YYDispatchQueuePool阅读';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://seapeak.disqus.com/embed.js';
