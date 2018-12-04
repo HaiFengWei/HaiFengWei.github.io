@@ -1822,7 +1822,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #1fff5d;
+  background: #9dff06;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2661,7 +2661,7 @@ embed {
   display: inline-block;
 }
 body {
-  background: url("https://source.unsplash.com/random/1600x900");
+  background: url("../image/background.jpg");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: 50% 50%;
@@ -2670,6 +2670,43 @@ body {
   margin-top: 60px;
   padding: 60px 60px 60px 60px;
   background: #fff;
-  opacity: 0.8;
+  opacity: 0.85;
   min-height: 500px;
+}
+.headband {
+  height: 0px;
+  background: #49b1f5;
+}
+.post {
+  margin-top: 60px;
+  margin-bottom: 60px;
+  padding: 25px;
+  -webkit-box-shadow: 0 0 14px rgba(202,203,203,0.5);
+  -moz-box-shadow: 0 0 14px rgba(202,203,204,0.5);
+}
+.site-meta .site-title {
+  font-size: 40px;
+  font-family: 'Comic Sans MS', sans-serif;
+  color: #fff;
+  background-color: rgba(255,255,255,0);
+}
+.site-meta .custom-logo-site-title {
+  font-size: 28px;
+  font-family: 'Comic Sans MS', sans-serif;
+  color: #fff;
+  background-color: rgba(255,255,255,0);
+}
+.brand {
+  background: none;
+}
+.powered-by,
+.theme-info {
+  display: none;
+}
+.post-meta-divider {
+  margin: 0 0.5em;
+  display: none;
+}
+.theme-info {
+  display: none;
 }
