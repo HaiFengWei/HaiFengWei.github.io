@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="基础语法阅读">
+<meta name="description" content="拥抱Swift,迎接未来 如今Swift4.0已经发布，各方面已经趋于成熟。相对于OC其简洁的语法、精准报错、定义变量简单等种种迹象表明着是苹果的新宠，而OC则成为过去时">
 <meta name="keywords" content="Swift,语法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="初识Swift">
 <meta property="og:url" content="http://yoursite.com/2018/10/06/初识Swift/index.html">
 <meta property="og:site_name" content="Seapeak&#39;s blogs">
-<meta property="og:description" content="基础语法阅读">
+<meta property="og:description" content="拥抱Swift,迎接未来 如今Swift4.0已经发布，各方面已经趋于成熟。相对于OC其简洁的语法、精准报错、定义变量简单等种种迹象表明着是苹果的新宠，而OC则成为过去时">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-04T14:24:00.099Z">
+<meta property="og:updated_time" content="2018-12-04T15:12:15.630Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初识Swift">
-<meta name="twitter:description" content="基础语法阅读">
+<meta name="twitter:description" content="拥抱Swift,迎接未来 如今Swift4.0已经发布，各方面已经趋于成熟。相对于OC其简洁的语法、精准报错、定义变量简单等种种迹象表明着是苹果的新宠，而OC则成为过去时">
 
 
 
@@ -100,7 +100,7 @@
     root: '/',
     scheme: 'Muse',
     version: '5.1.4',
-    sidebar: {"position":"left","display":"remove","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"right","display":"hide","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
     fancybox: true,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
@@ -145,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -318,16 +318,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/10/06/初识Swift/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/10/06/初识Swift/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -352,7 +342,17 @@
       
 
       
-        <h3 id="基础语法阅读"><a href="#基础语法阅读" class="headerlink" title="基础语法阅读"></a>基础语法阅读</h3>
+        <p><strong>拥抱Swift,迎接未来</strong></p>
+<p>如今Swift4.0已经发布，各方面已经趋于成熟。相对于OC其简洁的语法、精准报错、定义变量简单等种种迹象表明着是苹果的新宠，而OC则成为过去时<a id="more"></a></p>
+<h1 id="基础语法阅读"><a href="#基础语法阅读" class="headerlink" title="基础语法阅读"></a>基础语法阅读</h1><h3 id="可变变量与不可变变量"><a href="#可变变量与不可变变量" class="headerlink" title="可变变量与不可变变量"></a>可变变量与不可变变量</h3><ul>
+<li>可变变量修饰符<code>var</code>,若不指定类型，编译器可以根据给变量所赋的值，推断它的数据类型</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">\\ String类型</span><br><span class="line">var name = <span class="string">"xiaoming"</span></span><br><span class="line">var tempName : String = <span class="string">"tempXiaoming"</span></span><br><span class="line">name = <span class="string">"变量可改变"</span></span><br><span class="line">\\ Int类型</span><br><span class="line">var age  = <span class="number">1</span> </span><br><span class="line">var tempAge : Int  = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>不可变变量修饰符<code>let</code>,若不指定类型，编译器可以根据给常量所赋的值，推断它的数据类型</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">\\ String类型</span><br><span class="line">let name = <span class="string">"xiaoming"</span></span><br><span class="line">let tempName : String = <span class="string">"tempXiaoming"</span></span><br><span class="line">\\ name = <span class="string">"不可变变量不可改变"</span> </span><br><span class="line">\\ Int类型</span><br><span class="line">let age  = <span class="number">1</span> </span><br><span class="line">let tempAge : Int  = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
       
     </div>
     
@@ -384,8 +384,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/05/Objective-C 中的内存分配/" rel="next" title="Objective-C 中的内存分配">
-                <i class="fa fa-chevron-left"></i> Objective-C 中的内存分配
+              <a href="/2018/08/20/GCD/" rel="next" title="GCD简介">
+                <i class="fa fa-chevron-left"></i> GCD简介
               </a>
             
           </div>
@@ -427,12 +427,7 @@
 
   
     <div class="comments" id="comments">
-      <div id="disqus_thread">
-        <noscript>
-          Please enable JavaScript to view the
-          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
-        </noscript>
-      </div>
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MTQ2Mi8xODAwOQ=="></div>
     </div>
 
   
@@ -440,6 +435,118 @@
 
 
         </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Seapeak</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基础语法阅读"><span class="nav-number">1.</span> <span class="nav-text">基础语法阅读</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#可变变量与不可变变量"><span class="nav-number">1.0.1.</span> <span class="nav-text">可变变量与不可变变量</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
         
       </div>
     </main>
@@ -484,6 +591,8 @@
     
       <div class="back-to-top">
         <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
         
       </div>
     
@@ -582,26 +691,6 @@
 
   
 
-    
-      <script id="dsq-count-scr" src="https://seapeak.disqus.com/count.js" async></script>
-    
-
-    
-      <script type="text/javascript">
-        var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/10/06/初识Swift/';
-          this.page.identifier = '2018/10/06/初识Swift/';
-          this.page.title = '初识Swift';
-        };
-        var d = document, s = d.createElement('script');
-        s.src = 'https://seapeak.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', '' + +new Date());
-        (d.head || d.body).appendChild(s);
-      </script>
-    
-
-  
-
 
 
 
@@ -614,6 +703,21 @@
   
 
 
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
 
 
 

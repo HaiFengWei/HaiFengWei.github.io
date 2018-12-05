@@ -100,7 +100,7 @@
     root: '/',
     scheme: 'Muse',
     version: '5.1.4',
-    sidebar: {"position":"left","display":"remove","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"right","display":"hide","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
     fancybox: true,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
@@ -145,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -318,16 +318,6 @@
 
           
             
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/08/20/GCD/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/08/20/GCD/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
           
 
           
@@ -431,8 +421,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/10/05/Objective-C 中的内存分配/" rel="prev" title="Objective-C 中的内存分配">
-                Objective-C 中的内存分配 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/10/06/初识Swift/" rel="prev" title="初识Swift">
+                初识Swift <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -464,12 +454,7 @@
 
   
     <div class="comments" id="comments">
-      <div id="disqus_thread">
-        <noscript>
-          Please enable JavaScript to view the
-          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
-        </noscript>
-      </div>
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MTQ2Mi8xODAwOQ=="></div>
     </div>
 
   
@@ -477,6 +462,118 @@
 
 
         </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Seapeak</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#GCD-中的队列类型可分为三种："><span class="nav-number">1.</span> <span class="nav-text">GCD 中的队列类型可分为三种：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取队列"><span class="nav-number">2.</span> <span class="nav-text">获取队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-系统默认不提供串行队列，需要我们手动创建（Main-Dispatch-Queue是特殊串行队列除外）"><span class="nav-number">2.1.</span> <span class="nav-text">1.系统默认不提供串行队列，需要我们手动创建（Main Dispatch Queue是特殊串行队列除外）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-获取并行队列-可获取系统提供全局并行队列或者手动创建"><span class="nav-number">2.1.1.</span> <span class="nav-text">2. 获取并行队列(可获取系统提供全局并行队列或者手动创建)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取主线程队列dispatch-get-main-queue"><span class="nav-number">2.2.</span> <span class="nav-text">获取主线程队列dispatch_get_main_queue()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#手动创建队列和系统创建队列区别："><span class="nav-number">2.3.</span> <span class="nav-text">手动创建队列和系统创建队列区别：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建的-Queue-释放问题"><span class="nav-number">2.4.</span> <span class="nav-text">创建的 Queue 释放问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行方式"><span class="nav-number">2.5.</span> <span class="nav-text">执行方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行任务"><span class="nav-number">2.6.</span> <span class="nav-text">执行任务</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#注意事项"><span class="nav-number">2.6.0.1.</span> <span class="nav-text">注意事项</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
         
       </div>
     </main>
@@ -521,6 +618,8 @@
     
       <div class="back-to-top">
         <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
         
       </div>
     
@@ -619,26 +718,6 @@
 
   
 
-    
-      <script id="dsq-count-scr" src="https://seapeak.disqus.com/count.js" async></script>
-    
-
-    
-      <script type="text/javascript">
-        var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/08/20/GCD/';
-          this.page.identifier = '2018/08/20/GCD/';
-          this.page.title = 'GCD简介';
-        };
-        var d = document, s = d.createElement('script');
-        s.src = 'https://seapeak.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', '' + +new Date());
-        (d.head || d.body).appendChild(s);
-      </script>
-    
-
-  
-
 
 
 
@@ -651,6 +730,21 @@
   
 
 
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
 
 
 

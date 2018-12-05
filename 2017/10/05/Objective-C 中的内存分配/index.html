@@ -83,11 +83,11 @@
 <meta name="keywords" content="Object-C,内存">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Objective-C 中的内存分配">
-<meta property="og:url" content="http://yoursite.com/2018/10/05/Objective-C 中的内存分配/index.html">
+<meta property="og:url" content="http://yoursite.com/2017/10/05/Objective-C 中的内存分配/index.html">
 <meta property="og:site_name" content="Seapeak&#39;s blogs">
 <meta property="og:description" content="在 Objective-C 中，对象通常是使用 alloc 方法在堆上创建的。 [NSObject alloc] 方法会在对堆上分配一块内存，按照NSObject的内部结构填充这块儿内存区域。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-04T14:19:52.702Z">
+<meta property="og:updated_time" content="2018-12-04T15:36:52.398Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Objective-C 中的内存分配">
 <meta name="twitter:description" content="在 Objective-C 中，对象通常是使用 alloc 方法在堆上创建的。 [NSObject alloc] 方法会在对堆上分配一块内存，按照NSObject的内部结构填充这块儿内存区域。">
@@ -100,7 +100,7 @@
     root: '/',
     scheme: 'Muse',
     version: '5.1.4',
-    sidebar: {"position":"left","display":"remove","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"right","display":"hide","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
     fancybox: true,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
@@ -120,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/05/Objective-C 中的内存分配/">
+  <link rel="canonical" href="http://yoursite.com/2017/10/05/Objective-C 中的内存分配/">
 
 
 
@@ -145,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/05/Objective-C 中的内存分配/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/05/Objective-C 中的内存分配/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Seapeak">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-05T11:19:23+08:00">
-                2018-10-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-05T11:19:23+08:00">
+                2017-10-05
               </time>
             
 
@@ -317,16 +317,6 @@
           
 
           
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/10/05/Objective-C 中的内存分配/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/10/05/Objective-C 中的内存分配/" itemprop="commentCount"></span>
-                </a>
-              </span>
             
           
 
@@ -446,18 +436,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/20/GCD/" rel="next" title="GCD简介">
-                <i class="fa fa-chevron-left"></i> GCD简介
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/10/06/初识Swift/" rel="prev" title="初识Swift">
-                初识Swift <i class="fa fa-chevron-right"></i>
+              <a href="/2018/08/16/YYDispatchQueuePool学习/" rel="prev" title="YYDispatchQueuePool阅读">
+                YYDispatchQueuePool阅读 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -489,12 +475,7 @@
 
   
     <div class="comments" id="comments">
-      <div id="disqus_thread">
-        <noscript>
-          Please enable JavaScript to view the
-          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
-        </noscript>
-      </div>
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80MTQ2Mi8xODAwOQ=="></div>
     </div>
 
   
@@ -502,6 +483,118 @@
 
 
         </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Seapeak</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MRC与ARC"><span class="nav-number">1.</span> <span class="nav-text">MRC与ARC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MRC"><span class="nav-number">2.</span> <span class="nav-text">MRC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#四个法则"><span class="nav-number">2.1.</span> <span class="nav-text">四个法则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Autorelease"><span class="nav-number">2.2.</span> <span class="nav-text">Autorelease</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MRC变量管理方法"><span class="nav-number">2.3.</span> <span class="nav-text">MRC变量管理方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ARC"><span class="nav-number">3.</span> <span class="nav-text">ARC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ARC变量标识符"><span class="nav-number">3.1.</span> <span class="nav-text">ARC变量标识符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ARC属性标识符"><span class="nav-number">3.2.</span> <span class="nav-text">ARC属性标识符</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
         
       </div>
     </main>
@@ -546,6 +639,8 @@
     
       <div class="back-to-top">
         <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
         
       </div>
     
@@ -644,26 +739,6 @@
 
   
 
-    
-      <script id="dsq-count-scr" src="https://seapeak.disqus.com/count.js" async></script>
-    
-
-    
-      <script type="text/javascript">
-        var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/10/05/Objective-C 中的内存分配/';
-          this.page.identifier = '2018/10/05/Objective-C 中的内存分配/';
-          this.page.title = 'Objective-C 中的内存分配';
-        };
-        var d = document, s = d.createElement('script');
-        s.src = 'https://seapeak.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', '' + +new Date());
-        (d.head || d.body).appendChild(s);
-      </script>
-    
-
-  
-
 
 
 
@@ -676,6 +751,21 @@
   
 
 
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
 
 
 
