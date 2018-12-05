@@ -1886,7 +1886,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ffa6ff;
+  background: #b870ff;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2730,13 +2730,15 @@ body {
   background-attachment: fixed;
   background-position: 50% 50%;
   background-size: cover;
+  width: auto;
+  Height: auto;
 }
 .main-inner {
   margin-top: 0px;
   padding: 0px 60px 20px 60px;
   background: RGBA(255, 255, 255, 1);
   opacity: 0.85;
-  min-height: 500px;
+  min-height: auto;
   margin: 0 auto;
 }
 .headband {
