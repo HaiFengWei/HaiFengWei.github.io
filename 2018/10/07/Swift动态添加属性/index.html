@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Seapeak&#39;s blogs">
 <meta property="og:description" content="如何在不破坏原有类封装下添加属性当我们想给系统类或者自定义基类添加某个属性（简称targetVaule）时，在不破坏原有类封装情形下：  Object-C: 可以使用继承（直接添加属性）和分类（动态添加属性）。 Swift: 可以使用继承（直接添加属性）和拓展（动态添加属性）。  注： 推荐使用拓展Swift和分类Object-C,因为使用继承，所有使用到targetVaule都需要继承自定义属性">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-06T06:34:13.968Z">
+<meta property="og:updated_time" content="2018-12-06T06:39:33.906Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS动态添加属性">
 <meta name="twitter:description" content="如何在不破坏原有类封装下添加属性当我们想给系统类或者自定义基类添加某个属性（简称targetVaule）时，在不破坏原有类封装情形下：  Object-C: 可以使用继承（直接添加属性）和分类（动态添加属性）。 Swift: 可以使用继承（直接添加属性）和拓展（动态添加属性）。  注： 推荐使用拓展Swift和分类Object-C,因为使用继承，所有使用到targetVaule都需要继承自定义属性">
@@ -376,7 +376,7 @@
 <h3 id="Swift为拓展添加属性"><a href="#Swift为拓展添加属性" class="headerlink" title="Swift为拓展添加属性"></a>Swift为拓展添加属性</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="built_in">NSObjcCategoriesKeys</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> var targetVaulekey : String = <span class="string">"targetVaulekey"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">extension <span class="built_in">NSObjc</span> &#123;</span><br><span class="line">    var targetVaule: String? &#123;</span><br><span class="line">        set(newValue) &#123;</span><br><span class="line">            objc_setAssociatedObject(<span class="keyword">self</span>, &amp;<span class="built_in">NSObjcCategoriesKeys</span>. targetVaulekey, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)</span><br><span class="line">        &#125;</span><br><span class="line">        get &#123;</span><br><span class="line">            <span class="keyword">return</span>  objc_getAssociatedObject(<span class="keyword">self</span>, &amp;<span class="built_in">NSObjcCategoriesKeys</span>. targetVaulekey) as? String</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <h4 id="注："><a href="#注：" class="headerlink" title="注："></a>注：</h4><ol>
 <li><code>Swift</code>中没有分类这个概念，仅有拓展</li>
-<li>为什么使用结构体而不使用常量，因为使用常量，多个对象使用这一属性时，所绑定的key是一样的，会将值储存在同一内存，会造成错乱。而使用结构体则相当于创建多个结构体对象，每个对象与结构体对象一一对应，所以绑定的key也是不同的，不会造成错乱</li>
+<li>为什么使用结构体而不使用常量，因为使用常量，多个对象使用这一属性时，所绑定的key是一样的，会将值储存在同一内存，会造成错乱。而使用结构体则相当于没创建一个对象就会创建一个对应的结构体对象与其一一对应，所以绑定的key也是不同的，不会造成错乱</li>
 </ol>
 
       
