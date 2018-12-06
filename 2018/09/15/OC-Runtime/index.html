@@ -82,15 +82,15 @@
 <meta name="description" content="Runtime 是 Objective-C 区别于 C 语言这样的静态语言的一个非常重要的特性。对于 C 语言，函数的调用会在编译期就已经决定好，在编译完成后直接顺序执行。但是 OC 是一门动态语言，函数调用变成了消息发送，在编译期不能知道要调用哪个函数。所以 Runtime 无非就是去解决如何在运行时期找到调用方法这样的问题。">
 <meta name="keywords" content="Object-C,runtime">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OC-Runtime">
+<meta property="og:title" content="OC-Runtime消息转发">
 <meta property="og:url" content="http://yoursite.com/2018/09/15/OC-Runtime/index.html">
 <meta property="og:site_name" content="Seapeak&#39;s blogs">
 <meta property="og:description" content="Runtime 是 Objective-C 区别于 C 语言这样的静态语言的一个非常重要的特性。对于 C 语言，函数的调用会在编译期就已经决定好，在编译完成后直接顺序执行。但是 OC 是一门动态语言，函数调用变成了消息发送，在编译期不能知道要调用哪个函数。所以 Runtime 无非就是去解决如何在运行时期找到调用方法这样的问题。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://raw.githubusercontent.com/WiInputMethod/interview/master/img/ios-runtime-method-resolve.png">
-<meta property="og:updated_time" content="2018-12-05T16:03:43.320Z">
+<meta property="og:updated_time" content="2018-12-06T03:33:58.081Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OC-Runtime">
+<meta name="twitter:title" content="OC-Runtime消息转发">
 <meta name="twitter:description" content="Runtime 是 Objective-C 区别于 C 语言这样的静态语言的一个非常重要的特性。对于 C 语言，函数的调用会在编译期就已经决定好，在编译完成后直接顺序执行。但是 OC 是一门动态语言，函数调用变成了消息发送，在编译期不能知道要调用哪个函数。所以 Runtime 无非就是去解决如何在运行时期找到调用方法这样的问题。">
 <meta name="twitter:image" content="https://raw.githubusercontent.com/WiInputMethod/interview/master/img/ios-runtime-method-resolve.png">
 
@@ -128,7 +128,7 @@
 
 
 
-  <title>OC-Runtime | Seapeak's blogs</title>
+  <title>OC-Runtime消息转发 | Seapeak's blogs</title>
   
 
 
@@ -282,7 +282,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">OC-Runtime</h1>
+          <h1 class="post-title" itemprop="name headline">OC-Runtime消息转发</h1>
         
 
         <div class="post-meta">
@@ -365,19 +365,30 @@
 
       
         <p>Runtime 是 Objective-C 区别于 C 语言这样的静态语言的一个非常重要的特性。对于 C 语言，函数的调用会在编译期就已经决定好，在编译完成后直接顺序执行。但是 OC 是一门动态语言，函数调用变成了消息发送，在编译期不能知道要调用哪个函数。所以 Runtime 无非就是去解决如何在运行时期找到调用方法这样的问题。<a id="more"></a></p>
-<h2 id="动态消息解析"><a href="#动态消息解析" class="headerlink" title="动态消息解析"></a>动态消息解析</h2><p><img src="https://raw.githubusercontent.com/WiInputMethod/interview/master/img/ios-runtime-method-resolve.png" alt=""><br><strong>YYDispatchQueuePool</strong>用一个全局的<strong>串行队列</strong>来尽量控制全局线程数。</p>
-<h2 id="分析源码（TODO-待完善）"><a href="#分析源码（TODO-待完善）" class="headerlink" title="分析源码（TODO:待完善）"></a>分析源码（TODO:待完善）</h2><p>1、首先了解Qos的优先级</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSQualityOfServiceUserInteractive</span> <span class="comment">//与用户交互的任务，这些任务通常跟UI级别的刷新相关，比如动画，这些任务需要在一瞬间完成</span></span><br><span class="line"><span class="built_in">NSQualityOfServiceUserInitiated</span>   <span class="comment">//由用户发起的并且需要立即得到结果的任务，比如滑动scroll view时去加载数据用于后续cell的显示，这些任务通常跟后续的用户交互相关，在几秒或者更短的时间内完成</span></span><br><span class="line"><span class="built_in">NSQualityOfServiceUtility</span>         <span class="comment">//一些可能需要花点时间的任务，这些任务不需要马上返回结果，比如下载的任务，这些任务可能花费几秒或者几分钟的时间 </span></span><br><span class="line"><span class="built_in">NSQualityOfServiceBackground</span>      <span class="comment">//这些任务对用户不可见，比如后台进行备份的操作，这些任务可能需要较长的时间，几分钟甚至几个小时 </span></span><br><span class="line"><span class="built_in">NSQualityOfServiceDefault</span>         <span class="comment">//优先级介于user-initiated 和 utility，当没有 QoS信息时默认使用，开发者不应该使用这个值来设置自己的任务</span></span><br></pre></td></tr></table></figure>
-<p>Qos与GCD queue优先级对应关系</p>
-<p>2、了解结构体YYDispatchContext</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span>&#123; </span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span> *name;    <span class="comment">//线程名</span></span><br><span class="line">  <span class="keyword">void</span> **queues;       <span class="comment">//队列数组</span></span><br><span class="line">  uint32_t queueCount; <span class="comment">//队列数目</span></span><br><span class="line">  int32_t counter;     <span class="comment">//自增计数</span></span><br><span class="line">&#125;YYDispatchContext;</span><br></pre></td></tr></table></figure>
-<p>3、如何获取队列</p>
-<p>传入上下文，根据上下文去分配任务，返回<strong>串行队列</strong></p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="built_in">dispatch_queue_t</span> YYDispatchContextGetQueue(YYDispatchContext *context) &#123;</span><br><span class="line">    uint32_t counter = (uint32_t)OSAtomicIncrement32(&amp;context-&gt;counter);</span><br><span class="line">    <span class="keyword">void</span> *queue = context-&gt;queues[counter % context-&gt;queueCount];</span><br><span class="line">    <span class="keyword">return</span> (__bridge <span class="built_in">dispatch_queue_t</span>)(queue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>注：</strong> OSAtomicIncrement32是自增函数，原子性属于线程安全</p>
-<h2 id="调用示例（TODO-待完善）"><a href="#调用示例（TODO-待完善）" class="headerlink" title="调用示例（TODO:待完善）"></a>调用示例（TODO:待完善）</h2><p>导入头文件<code>#import &quot;YYDispatchQueuePool.h&quot;</code></p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)testYYDispatchQueuePool</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 创建YYDispatchQueuePool实例，设置最大并发数为3</span></span><br><span class="line">    YYDispatchQueuePool *pool = [[YYDispatchQueuePool alloc] initWithName:<span class="string">@"file. testYYDispatchQueuePool"</span> queueCount:<span class="number">3</span> qos:<span class="built_in">NSQualityOfServiceBackground</span>];</span><br><span class="line">    <span class="comment">// 遍历执行任务</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> index = <span class="number">0</span>; index &lt; <span class="number">100</span>; index++) &#123;</span><br><span class="line">        <span class="comment">// 获取队列</span></span><br><span class="line">        <span class="built_in">dispatch_queue_t</span> queue = [pool queue];</span><br><span class="line">        <span class="built_in">dispatch_async</span>(queue, ^&#123;</span><br><span class="line">            <span class="built_in">NSLog</span>(<span class="string">@"index:%d"</span>,index);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="源码链接"><a href="#源码链接" class="headerlink" title="源码链接"></a>源码链接</h2><h4 id="YYDispatchQueuePool"><a href="#YYDispatchQueuePool" class="headerlink" title="YYDispatchQueuePool"></a><a href="https://github.com/ibireme/YYDispatchQueuePool" target="_blank" rel="noopener">YYDispatchQueuePool</a></h4>
+<h2 id="消息转发"><a href="#消息转发" class="headerlink" title="消息转发"></a>消息转发</h2><p>当向一个对象发送一条消息，但它并没有实现的时候，<code>_objc_msgForward</code>会尝试做消息转发<br><img src="https://raw.githubusercontent.com/WiInputMethod/interview/master/img/ios-runtime-method-resolve.png" alt=""></p>
+<h4 id="简单打印下消息转发的log（Xcode-10及以上未出现打印）"><a href="#简单打印下消息转发的log（Xcode-10及以上未出现打印）" class="headerlink" title="简单打印下消息转发的log（Xcode 10及以上未出现打印）"></a>简单打印下消息转发的log（Xcode 10及以上未出现打印）</h4><p>首先随便创建个类（<code>RuntimeTest</code> 继承与<code>NSObject</code>,未实现<code>test</code>方法），编写一下代码</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RuntimeTest *test = [[RuntimeTest alloc] init];</span><br><span class="line">[test performSelector:<span class="keyword">@selector</span>(test)];</span><br></pre></td></tr></table></figure>
+<p>开启debug模式，在下面👇这句加断点，设备选择模拟器</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RuntimeTest *test = [[RuntimeTest alloc] init];</span><br></pre></td></tr></table></figure>
+<p>运行代码，当执行到断点暂停时在lldb中输入</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">po (<span class="keyword">void</span>)instrumentObjcMessageSends(<span class="literal">YES</span>)</span><br></pre></td></tr></table></figure>
+<p>继续执行代码直至崩溃，使用终端 <strong>open /private/tmp/</strong> 打开文件夹找到<strong>msgSends-xxxx</strong>(最新时间生成)文件，（👇文件部分内容）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">- NSObject NSObject performSelector:</span><br><span class="line">+ NSObject NSObject resolveInstanceMethod:</span><br><span class="line">+ NSObject NSObject resolveInstanceMethod:</span><br><span class="line">- NSObject NSObject forwardingTargetForSelector:</span><br><span class="line">- NSObject NSObject forwardingTargetForSelector:</span><br><span class="line">- NSObject NSObject methodSignatureForSelector:</span><br><span class="line">- NSObject NSObject methodSignatureForSelector:</span><br><span class="line">- NSObject NSObject class</span><br><span class="line">- NSObject NSObject doesNotRecognizeSelector:</span><br><span class="line">- NSObject NSObject doesNotRecognizeSelector:</span><br><span class="line">- NSObject NSObject class</span><br></pre></td></tr></table></figure>
+<p>结合NSObject文档，可以知道<code>_objc_msgForward</code>消息转发做了如下几件事：</p>
+<ol>
+<li><p>通过<code>resolveInstanceMethod</code>得知方法是否为动态添加，YES则通过<code>class_addMethod</code>动态添加方法，处理消息，否则进入下一步。<code>dynamic</code>属性就与这个过程有关，当一个属性声明为 <code>dynamic</code>时 就是告诉编译器：开发者一定会添加<code>setter/getter</code>的实现，而编译时不用自动生成。</p>
+</li>
+<li><p>这步会进入<code>forwardingTargetForSelector</code>用于指定哪个对象来响应消息。如果返回<code>nil</code>则进入第三步。这种方式把消息原封不动地转发给目标对象，有着比较高的效率。如果不能自己的类里面找到替代方法，可以重载这个方法，然后把消息转给其他的对象。</p>
+</li>
+<li><p>这步调用<code>methodSignatureForSelector</code>进行方法签名，这可以将函数的参数类型和返回值封装。如果返回<code>nil</code>说明消息无法处理并报错<code>unrecognized selector sent to instance</code>，如果返回<code>methodSignature</code>，则进入<code>forwardInvocation</code>，在这里可以修改实现方法，修改响应对象等，如果方法调用成功，则结束。如果依然不能正确响应消息，则报错<code>unrecognized selector sent to instance</code>.</p>
+</li>
+</ol>
+<h3 id="使用场景："><a href="#使用场景：" class="headerlink" title="使用场景："></a>使用场景：</h3><ul>
+<li>可以在消息转发过程中，利用第3步<code>forwardInvocation</code>使用<code>try</code>进行异常捕捉不抛出，从而避免一些崩溃</li>
+<li>可以利用 2、3 中的步骤实现对接受消息对象的转移，可以实现“多重继承”的效果。</li>
+<li>等等…</li>
+</ul>
+
       
     </div>
     
@@ -570,7 +581,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#动态消息解析"><span class="nav-number">1.</span> <span class="nav-text">动态消息解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析源码（TODO-待完善）"><span class="nav-number">2.</span> <span class="nav-text">分析源码（TODO:待完善）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用示例（TODO-待完善）"><span class="nav-number">3.</span> <span class="nav-text">调用示例（TODO:待完善）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码链接"><span class="nav-number">4.</span> <span class="nav-text">源码链接</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#YYDispatchQueuePool"><span class="nav-number">4.0.1.</span> <span class="nav-text">YYDispatchQueuePool</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#消息转发"><span class="nav-number">1.</span> <span class="nav-text">消息转发</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简单打印下消息转发的log（Xcode-10及以上未出现打印）"><span class="nav-number">1.0.1.</span> <span class="nav-text">简单打印下消息转发的log（Xcode 10及以上未出现打印）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用场景："><span class="nav-number">1.1.</span> <span class="nav-text">使用场景：</span></a></li></ol></div>
             
 
           </div>
