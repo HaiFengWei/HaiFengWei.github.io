@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Object-C,runtime,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="如何在不破坏原有类封装下添加属性( 动态添加property )当我们想给系统类或者自定义基类添加某个属性（简称propertyName）时，在不破坏原有类封装情形下，可以使用继承（直接添加属性）和分类（动态添加属性）。 注： 推荐使用分类Object-C,因为使用继承，所有使用到propertyName都需要继承自定义属性类，侵入性太强。">
+<meta name="keywords" content="Object-C,runtime">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS动态添加属性">
+<meta property="og:url" content="http://yoursite.com/2018/10/07/iOS动态添加属性/index.html">
+<meta property="og:site_name" content="Seapeak&#39;s blogs">
+<meta property="og:description" content="如何在不破坏原有类封装下添加属性( 动态添加property )当我们想给系统类或者自定义基类添加某个属性（简称propertyName）时，在不破坏原有类封装情形下，可以使用继承（直接添加属性）和分类（动态添加属性）。 注： 推荐使用分类Object-C,因为使用继承，所有使用到propertyName都需要继承自定义属性类，侵入性太强。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-09T16:56:29.137Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS动态添加属性">
+<meta name="twitter:description" content="如何在不破坏原有类封装下添加属性( 动态添加property )当我们想给系统类或者自定义基类添加某个属性（简称propertyName）时，在不破坏原有类封装情形下，可以使用继承（直接添加属性）和分类（动态添加属性）。 注： 推荐使用分类Object-C,因为使用继承，所有使用到propertyName都需要继承自定义属性类，侵入性太强。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"hide","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/07/iOS动态添加属性/">
+
+
+
+
+
+  <title>iOS动态添加属性 | Seapeak's blogs</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?e3ba0f1dabf5976da6153680e507b8ee";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Seapeak's blogs</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/07/iOS动态添加属性/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="海风">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/image/head.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Seapeak's blogs">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS动态添加属性</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-07T22:21:51+08:00">
+                2018-10-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/07/iOS动态添加属性/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/10/07/iOS动态添加属性/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="如何在不破坏原有类封装下添加属性-动态添加property"><a href="#如何在不破坏原有类封装下添加属性-动态添加property" class="headerlink" title="如何在不破坏原有类封装下添加属性( 动态添加property )"></a>如何在不破坏原有类封装下添加属性( <em>动态添加<code>property</code></em> )</h3><p>当我们想给系统类或者自定义基类添加某个属性（简称<code>propertyName</code>）时，在不破坏原有类封装情形下，可以使用继承（直接添加属性）和分类（动态添加属性）。</p>
+<p><strong>注：</strong> 推荐使用<strong>分类<code>Object-C</code></strong>,因为使用继承，所有使用到<code>propertyName</code>都需要继承自定义属性类，侵入性太强。<a id="more"></a></p>
+<h3 id="动态添加属性原理"><a href="#动态添加属性原理" class="headerlink" title="动态添加属性原理"></a>动态添加属性原理</h3><p>利用runtime的特性，在第一次加载时添加属性</p>
+<h3 id="Object-C为分类添加属性"><a href="#Object-C为分类添加属性" class="headerlink" title="Object-C为分类添加属性"></a>Object-C为分类添加属性</h3><p>主要用到的runtime方法`：</p>
+<ul>
+<li><code>class_addProperty</code>：添加属性</li>
+<li><code>class_addMethod</code>：添加方法</li>
+<li><code>class_replaceProperty</code>：替换属性</li>
+<li><code>class_getInstanceVariable</code>：获取成员变量ivar</li>
+</ul>
+<p>下面就简单介绍下关键步骤，详细会附上代码链接：</p>
+<p>1.判断是否存在该成员变量,如果存在则无需进行后续操作，不存在就动态添加：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> targetClass:  表示要添加的属性的类</span></span><br><span class="line"><span class="comment"> propertyName: 表示要添加的属性名</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">Ivar ivar = class_getInstanceVariable(targetClass, [[<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"_%@"</span>, propertyName] UTF8String]);</span><br></pre></td></tr></table></figure>
+<p>2.添加属性(<code>class_addProperty</code>调用后会返回一个<code>BOOL</code>值。成功（返回YES）则添加属性，失败(返回NO)则动态替换属性)：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">// value:属性的赋值，根据属性值，判断属性类型</span></span><br><span class="line"> objc_property_attribute_t type = &#123; <span class="string">"T"</span>, [[<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"@\"%@\""</span>,<span class="built_in">NSStringFromClass</span>([value <span class="keyword">class</span>])] UTF8String] &#125;;</span><br><span class="line"> objc_property_attribute_t ownership = &#123; <span class="string">"&amp;"</span>, <span class="string">"N"</span> &#125;;</span><br><span class="line"> objc_property_attribute_t backingivar  = &#123; <span class="string">"V"</span>, [[<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"_%@"</span>, propertyName] UTF8String] &#125;;</span><br><span class="line"> objc_property_attribute_t attrs[] = &#123; type, ownership, backingivar &#125;;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> targetClass:   表示要添加的属性的类</span></span><br><span class="line"><span class="comment"> propertyName:  表示要添加的属性名</span></span><br><span class="line"><span class="comment"> attrs：        类特性列表</span></span><br><span class="line"><span class="comment"> attrsCount:    类特性个数</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> attrsCount = <span class="number">3</span>;</span><br><span class="line">class_addProperty(targetClass, [propertyName UTF8String], attrs, attrsCount)</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong>类特性，可以通过<code>property_getAttributes</code>去获取查看，<code>class_copyPropertyList</code>获取属性列表。符号表：<br><a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html" target="_blank" rel="noopener">Type Encodings</a></p>
+<p>3.动态替换属性（属性添加失败执行）：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">class_replaceProperty(targetClass, [propertyName UTF8String], attrs, attrsCount);</span><br></pre></td></tr></table></figure>
+<p>4.动态添加set和get方法(不管添加属性成功失败与否都要添加)：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)addMethod(Class _Nullable targetClass, <span class="built_in">NSString</span> * propertyName)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 动态添加方法就不详细去描述了，本文会附上一篇对runtime介绍比较详细的博客链接可以去看一下（关键点在于SEL和IMP，和OC运行会被汇编转换成C代码去执行）</span></span><br><span class="line">    <span class="comment">// 链接搜索关键字：Objective-C Runtime</span></span><br><span class="line">    class_addMethod(targetClass, <span class="built_in">NSSelectorFromString</span>(propertyName), (IMP)customGetter, <span class="string">"@@:"</span>);</span><br><span class="line">    class_addMethod(targetClass, <span class="built_in">NSSelectorFromString</span>([<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"set%@:"</span>,[propertyName capitalizedString]]), (IMP)customSetter, <span class="string">"v@:@"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 这里我是用一个字典作为容器，以属性名为key去存储新属性值.</span></span><br><span class="line"><span class="keyword">id</span> customGetter(<span class="keyword">id</span> targetClass, SEL _targetCmd) &#123;</span><br><span class="line">    <span class="keyword">if</span> (dictCustomerProperty == <span class="literal">nil</span>) &#123;</span><br><span class="line">        dictCustomerProperty = [<span class="built_in">NSMutableDictionary</span> new];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">NSString</span> *key = <span class="built_in">NSStringFromSelector</span>(_targetCmd);</span><br><span class="line">    <span class="keyword">return</span> [dictCustomerProperty objectForKey:key];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> customSetter(<span class="keyword">id</span> targetClass, SEL _targetCmd, <span class="keyword">id</span> newValue) &#123;</span><br><span class="line">    <span class="comment">//移除set</span></span><br><span class="line">    <span class="built_in">NSString</span> *key = [<span class="built_in">NSStringFromSelector</span>(_targetCmd) stringByReplacingCharactersInRange:<span class="built_in">NSMakeRange</span>(<span class="number">0</span>, <span class="number">3</span>) withString:<span class="string">@""</span>];</span><br><span class="line">    <span class="comment">//首字母小写</span></span><br><span class="line">    <span class="built_in">NSString</span> *head = [key substringWithRange:<span class="built_in">NSMakeRange</span>(<span class="number">0</span>, <span class="number">1</span>)];</span><br><span class="line">    head = [head lowercaseString];</span><br><span class="line">    key = [key stringByReplacingCharactersInRange:<span class="built_in">NSMakeRange</span>(<span class="number">0</span>, <span class="number">1</span>) withString:head];</span><br><span class="line">    <span class="comment">//移除后缀 ":"</span></span><br><span class="line">    key = [key stringByReplacingCharactersInRange:<span class="built_in">NSMakeRange</span>(key.length - <span class="number">1</span>, <span class="number">1</span>) withString:<span class="string">@""</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (dictCustomerProperty == <span class="literal">nil</span>) &#123;</span><br><span class="line">        dictCustomerProperty = [<span class="built_in">NSMutableDictionary</span> new];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    [dictCustomerProperty setObject:newValue forKey:key];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关键点也就这些地方了，这种方法的优点在于，生成的属性是动态添加进类中的。可以使用<code>class_copyPropertyList</code>获取到的。</p>
+<h3 id="注：runtime-API介绍博客"><a href="#注：runtime-API介绍博客" class="headerlink" title="注：runtime API介绍博客"></a><strong>注：</strong>runtime API介绍博客</h3><p> <a href="http://yulingtianxia.com/blog/2014/11/05/objective-c-runtime/#objc-property-t" target="_blank" rel="noopener">Objective-C Runtime</a></p>
+<h3 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h3><p>实现过于繁琐，所有进行简单封装，使用方式在所需拓展分类中，添加声明和方法注册即可，无需实现set和get。<br>封装实现：<a href="https://github.com/rookieme001/RMProperty" target="_blank" rel="noopener">RMProperty</a></p>
+<p><strong>.h文件</strong></p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">NSString</span> (<span class="title">RMProperty</span>)</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">NSString</span>    *test;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">NSDictionary</span> *dict;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p><strong>.m文件</strong></p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">"NSString+RMProperty.h"</span></span></span><br><span class="line"><span class="meta">#import <span class="meta-string">"RMProperty.h"</span></span></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">NSString</span> (<span class="title">RMProperty</span>)</span></span><br><span class="line">+ (<span class="keyword">void</span>)load &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</span><br><span class="line">    <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</span><br><span class="line">        [RMProperty addPropertyWithtarget:[<span class="keyword">self</span> new] withPropertyName:<span class="string">@"test"</span> withValue:[<span class="built_in">NSString</span> new]];</span><br><span class="line">        [RMProperty addPropertyWithtarget:[<span class="keyword">self</span> new] withPropertyName:<span class="string">@"dict"</span> withValue:[<span class="built_in">NSDictionary</span> new]];</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Object-C/" rel="tag"># Object-C</a>
+          
+            <a href="/tags/runtime/" rel="tag"># runtime</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/06/iOS动态绑定属性/" rel="next" title="iOS动态绑定属性">
+                <i class="fa fa-chevron-left"></i> iOS动态绑定属性
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/image/head.JPG" alt="海风">
+            
+              <p class="site-author-name" itemprop="name">海风</p>
+              <p class="site-description motion-element" itemprop="description">Never underestimate your power to change yourself!</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何在不破坏原有类封装下添加属性-动态添加property"><span class="nav-number">1.</span> <span class="nav-text">如何在不破坏原有类封装下添加属性( 动态添加property )</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态添加属性原理"><span class="nav-number">2.</span> <span class="nav-text">动态添加属性原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-C为分类添加属性"><span class="nav-number">3.</span> <span class="nav-text">Object-C为分类添加属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注：runtime-API介绍博客"><span class="nav-number">4.</span> <span class="nav-text">注：runtime API介绍博客</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#封装"><span class="nav-number">5.</span> <span class="nav-text">封装</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">海风</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: true,
+        notify: false,
+        appId: 'SrHOFb9gS0BLoPrGkW3KqgPg-gzGzoHsz',
+        appKey: 'fv4NEE7oroEFPk1ylLfmk4NN',
+        placeholder: '描写评论',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

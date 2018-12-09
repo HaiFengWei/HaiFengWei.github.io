@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Object-C,多线程,">
+  <meta name="keywords" content="Object-C,Runloop,">
 
 
 
@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="目的：解决当用并行队列来执行大量块时，当某个块所在线程被锁住时，并列队列会创建大量线程以至于占用了过多资源而影响到主线程的问题。">
-<meta name="keywords" content="Object-C,多线程">
+<meta name="description" content="概念iOS 中 RunLoop 是控制线程生命周期并接收事件进行处理的机制一个基础组件，NSRunLoop 和 CFRunLoopRef 都是和 RunLoop 机制相关的类。 CFRunLoopRef 基于 CoreFoundation 框架内，是纯 C 函数的 API，所有这些 API 都是线程安全的。 CFRunLoopRef 的代码是开源的。NSRunLoop 是基于 CFRunLoopR">
+<meta name="keywords" content="Object-C,Runloop">
 <meta property="og:type" content="article">
-<meta property="og:title" content="YYDispatchQueuePool阅读">
-<meta property="og:url" content="http://yoursite.com/2018/08/16/YYDispatchQueuePool学习/index.html">
+<meta property="og:title" content="OC-Runloop学习">
+<meta property="og:url" content="http://yoursite.com/2018/07/06/OC-RunLoop学习/index.html">
 <meta property="og:site_name" content="Seapeak&#39;s blogs">
-<meta property="og:description" content="目的：解决当用并行队列来执行大量块时，当某个块所在线程被锁住时，并列队列会创建大量线程以至于占用了过多资源而影响到主线程的问题。">
+<meta property="og:description" content="概念iOS 中 RunLoop 是控制线程生命周期并接收事件进行处理的机制一个基础组件，NSRunLoop 和 CFRunLoopRef 都是和 RunLoop 机制相关的类。 CFRunLoopRef 基于 CoreFoundation 框架内，是纯 C 函数的 API，所有这些 API 都是线程安全的。 CFRunLoopRef 的代码是开源的。NSRunLoop 是基于 CFRunLoopR">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/458529-74ed8a8b44ba56e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-12-06T06:55:09.875Z">
+<meta property="og:image" content="https://images2015.cnblogs.com/blog/62046/201705/62046-20170508103512066-65199905.png">
+<meta property="og:updated_time" content="2018-12-08T06:29:31.474Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="YYDispatchQueuePool阅读">
-<meta name="twitter:description" content="目的：解决当用并行队列来执行大量块时，当某个块所在线程被锁住时，并列队列会创建大量线程以至于占用了过多资源而影响到主线程的问题。">
-<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/458529-74ed8a8b44ba56e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="OC-Runloop学习">
+<meta name="twitter:description" content="概念iOS 中 RunLoop 是控制线程生命周期并接收事件进行处理的机制一个基础组件，NSRunLoop 和 CFRunLoopRef 都是和 RunLoop 机制相关的类。 CFRunLoopRef 基于 CoreFoundation 框架内，是纯 C 函数的 API，所有这些 API 都是线程安全的。 CFRunLoopRef 的代码是开源的。NSRunLoop 是基于 CFRunLoopR">
+<meta name="twitter:image" content="https://images2015.cnblogs.com/blog/62046/201705/62046-20170508103512066-65199905.png">
 
 
 
@@ -122,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/08/16/YYDispatchQueuePool学习/">
+  <link rel="canonical" href="http://yoursite.com/2018/07/06/OC-RunLoop学习/">
 
 
 
 
 
-  <title>YYDispatchQueuePool阅读 | Seapeak's blogs</title>
+  <title>OC-Runloop学习 | Seapeak's blogs</title>
   
 
 
@@ -265,7 +265,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/16/YYDispatchQueuePool学习/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/06/OC-RunLoop学习/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="海风">
@@ -282,7 +282,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">YYDispatchQueuePool阅读</h1>
+          <h1 class="post-title" itemprop="name headline">OC-Runloop学习</h1>
         
 
         <div class="post-meta">
@@ -294,8 +294,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-16T11:19:23+08:00">
-                2018-08-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-06T11:19:23+08:00">
+                2018-07-06
               </time>
             
 
@@ -335,8 +335,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/08/16/YYDispatchQueuePool学习/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/08/16/YYDispatchQueuePool学习/" itemprop="commentCount"></span>
+                <a href="/2018/07/06/OC-RunLoop学习/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/07/06/OC-RunLoop学习/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -364,20 +364,14 @@
       
 
       
-        <h2 id="目的："><a href="#目的：" class="headerlink" title="目的："></a>目的：</h2><p>解决当用<strong>并行队列</strong>来执行大量块时，当某个块所在线程被锁住时，<strong>并列队列</strong>会创建大量线程以至于占用了过多资源而影响到主线程的问题。<a id="more"></a></p>
-<h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p><strong>YYDispatchQueuePool</strong>用一个全局的<strong>串行队列</strong>来尽量控制全局线程数。</p>
-<h2 id="分析源码（TODO-待完善）"><a href="#分析源码（TODO-待完善）" class="headerlink" title="分析源码（TODO:待完善）"></a>分析源码（TODO:待完善）</h2><p>1、首先了解Qos的优先级</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSQualityOfServiceUserInteractive</span> <span class="comment">//与用户交互的任务，这些任务通常跟UI级别的刷新相关，比如动画，这些任务需要在一瞬间完成</span></span><br><span class="line"><span class="built_in">NSQualityOfServiceUserInitiated</span>   <span class="comment">//由用户发起的并且需要立即得到结果的任务，比如滑动scroll view时去加载数据用于后续cell的显示，这些任务通常跟后续的用户交互相关，在几秒或者更短的时间内完成</span></span><br><span class="line"><span class="built_in">NSQualityOfServiceUtility</span>         <span class="comment">//一些可能需要花点时间的任务，这些任务不需要马上返回结果，比如下载的任务，这些任务可能花费几秒或者几分钟的时间 </span></span><br><span class="line"><span class="built_in">NSQualityOfServiceBackground</span>      <span class="comment">//这些任务对用户不可见，比如后台进行备份的操作，这些任务可能需要较长的时间，几分钟甚至几个小时 </span></span><br><span class="line"><span class="built_in">NSQualityOfServiceDefault</span>         <span class="comment">//优先级介于user-initiated 和 utility，当没有 QoS信息时默认使用，开发者不应该使用这个值来设置自己的任务</span></span><br></pre></td></tr></table></figure>
-<p>Qos与GCD queue优先级对应关系<br><img src="http://upload-images.jianshu.io/upload_images/458529-74ed8a8b44ba56e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>2、了解结构体YYDispatchContext</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span>&#123; </span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span> *name;    <span class="comment">//线程名</span></span><br><span class="line">  <span class="keyword">void</span> **queues;       <span class="comment">//队列数组</span></span><br><span class="line">  uint32_t queueCount; <span class="comment">//队列数目</span></span><br><span class="line">  int32_t counter;     <span class="comment">//自增计数</span></span><br><span class="line">&#125;YYDispatchContext;</span><br></pre></td></tr></table></figure>
-<p>3、如何获取队列</p>
-<p>传入上下文，根据上下文去分配任务，返回<strong>串行队列</strong></p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="built_in">dispatch_queue_t</span> YYDispatchContextGetQueue(YYDispatchContext *context) &#123;</span><br><span class="line">    uint32_t counter = (uint32_t)OSAtomicIncrement32(&amp;context-&gt;counter);</span><br><span class="line">    <span class="keyword">void</span> *queue = context-&gt;queues[counter % context-&gt;queueCount];</span><br><span class="line">    <span class="keyword">return</span> (__bridge <span class="built_in">dispatch_queue_t</span>)(queue);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>注：</strong> OSAtomicIncrement32是自增函数，原子性属于线程安全</p>
-<h2 id="调用示例（TODO-待完善）"><a href="#调用示例（TODO-待完善）" class="headerlink" title="调用示例（TODO:待完善）"></a>调用示例（TODO:待完善）</h2><p>导入头文件<code>#import &quot;YYDispatchQueuePool.h&quot;</code></p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)testYYDispatchQueuePool</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 创建YYDispatchQueuePool实例，设置最大并发数为3</span></span><br><span class="line">    YYDispatchQueuePool *pool = [[YYDispatchQueuePool alloc] initWithName:<span class="string">@"file. testYYDispatchQueuePool"</span> queueCount:<span class="number">3</span> qos:<span class="built_in">NSQualityOfServiceBackground</span>];</span><br><span class="line">    <span class="comment">// 遍历执行任务</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> index = <span class="number">0</span>; index &lt; <span class="number">100</span>; index++) &#123;</span><br><span class="line">        <span class="comment">// 获取队列</span></span><br><span class="line">        <span class="built_in">dispatch_queue_t</span> queue = [pool queue];</span><br><span class="line">        <span class="built_in">dispatch_async</span>(queue, ^&#123;</span><br><span class="line">            <span class="built_in">NSLog</span>(<span class="string">@"index:%d"</span>,index);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="源码链接"><a href="#源码链接" class="headerlink" title="源码链接"></a>源码链接</h2><h4 id="YYDispatchQueuePool"><a href="#YYDispatchQueuePool" class="headerlink" title="YYDispatchQueuePool"></a><a href="https://github.com/ibireme/YYDispatchQueuePool" target="_blank" rel="noopener">YYDispatchQueuePool</a></h4>
+        <h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>iOS 中 RunLoop 是控制线程生命周期并接收事件进行处理的机制一个基础组件，NSRunLoop 和 CFRunLoopRef 都是和 RunLoop 机制相关的类。</p>
+<p>CFRunLoopRef 基于 CoreFoundation 框架内，是纯 C 函数的 API，所有这些 API 都是线程安全的。</p>
+<p>CFRunLoopRef 的代码是开源的。NSRunLoop 是基于 CFRunLoopRef ，提供了面向对象的 API，但是这些 API 不是线程安全的，而且并未提供额外的其他功能。<a id="more"></a></p>
+<h3 id="CFRunloopRef"><a href="#CFRunloopRef" class="headerlink" title="CFRunloopRef"></a>CFRunloopRef</h3><p>苹果已经开源了CoreFoundation源代码,可以通过分析CFRloop源码去了解运行机制：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">int32_t __CFRunLoopRun()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 通知即将进入runloop</span></span><br><span class="line">    __CFRunLoopDoObservers(KCFRunLoopEntry);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">do</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 通知将要处理timer和source</span></span><br><span class="line">        __CFRunLoopDoObservers(kCFRunLoopBeforeTimers);</span><br><span class="line">        __CFRunLoopDoObservers(kCFRunLoopBeforeSources);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 处理非延迟的主线程调用</span></span><br><span class="line">        __CFRunLoopDoBlocks();</span><br><span class="line">        <span class="comment">// 处理Source0事件</span></span><br><span class="line">        __CFRunLoopDoSource0();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (sourceHandledThisLoop) &#123;</span><br><span class="line">            __CFRunLoopDoBlocks();</span><br><span class="line">         &#125;</span><br><span class="line">        <span class="comment">/// 如果有 Source1 (基于port) 处于 ready 状态，直接处理这个 Source1 然后跳转去处理消息。</span></span><br><span class="line">        <span class="keyword">if</span> (__Source0DidDispatchPortLastTime) &#123;</span><br><span class="line">            Boolean hasMsg = __CFRunLoopServiceMachPort();</span><br><span class="line">            <span class="keyword">if</span> (hasMsg) <span class="keyword">goto</span> handle_msg;</span><br><span class="line">        &#125;</span><br><span class="line">            </span><br><span class="line">        <span class="comment">/// 通知 Observers: RunLoop 的线程即将进入休眠(sleep)。</span></span><br><span class="line">        <span class="keyword">if</span> (!sourceHandledThisLoop) &#123;</span><br><span class="line">            __CFRunLoopDoObservers(runloop, currentMode, kCFRunLoopBeforeWaiting);</span><br><span class="line">        &#125;</span><br><span class="line">            </span><br><span class="line">        <span class="comment">// GCD dispatch main queue</span></span><br><span class="line">        CheckIfExistMessagesInMainDispatchQueue();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 即将进入休眠</span></span><br><span class="line">        __CFRunLoopDoObservers(kCFRunLoopBeforeWaiting);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 等待内核mach_msg事件</span></span><br><span class="line">        mach_port_t wakeUpPort = SleepAndWaitForWakingUpPorts();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 等待。。。</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 从等待中醒来</span></span><br><span class="line">        __CFRunLoopDoObservers(kCFRunLoopAfterWaiting);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 处理因timer的唤醒</span></span><br><span class="line">        <span class="keyword">if</span> (wakeUpPort == timerPort)</span><br><span class="line">            __CFRunLoopDoTimers();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 处理异步方法唤醒,如dispatch_async</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (wakeUpPort == mainDispatchQueuePort)</span><br><span class="line">            __CFRUNLOOP_IS_SERVICING_THE_MAIN_DISPATCH_QUEUE__()</span><br><span class="line">            </span><br><span class="line">        <span class="comment">// 处理Source1</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            __CFRunLoopDoSource1();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 再次确保是否有同步的方法需要调用</span></span><br><span class="line">        __CFRunLoopDoBlocks();</span><br><span class="line">        </span><br><span class="line">    &#125; <span class="keyword">while</span> (!stop &amp;&amp; !timeout);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 通知即将退出runloop</span></span><br><span class="line">    __CFRunLoopDoObservers(<span class="built_in">CFRunLoopExit</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从源码中可以看出，<code>runloop</code> 核心类容是一个 <code>do while</code> 循环，这也正是Runloop运行的本质。执行了这个函数以后就一直处于“等待-处理”的循环之中，直到循环结束。只是不同于我们自己写的循环它在休眠时几乎不会占用系统资源，当然这是由于系统内核负责实现的，也是Runloop精华所在。</p>
+<p>下面👇应一张图描述运行循环<br><img src="https://images2015.cnblogs.com/blog/62046/201705/62046-20170508103512066-65199905.png" alt=""></p>
+
       
     </div>
     
@@ -396,7 +390,7 @@
           
             <a href="/tags/Object-C/" rel="tag"># Object-C</a>
           
-            <a href="/tags/多线程/" rel="tag"># 多线程</a>
+            <a href="/tags/Runloop/" rel="tag"># Runloop</a>
           
         </div>
       
@@ -409,8 +403,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/06/OC-RunLoop学习/" rel="next" title="OC-Runloop学习">
-                <i class="fa fa-chevron-left"></i> OC-Runloop学习
+              <a href="/2017/10/05/Objective-C 中的内存分配/" rel="next" title="Objective-C 中的内存分配">
+                <i class="fa fa-chevron-left"></i> Objective-C 中的内存分配
               </a>
             
           </div>
@@ -419,8 +413,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/08/20/GCD/" rel="prev" title="GCD简介">
-                GCD简介 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/08/16/YYDispatchQueuePool学习/" rel="prev" title="YYDispatchQueuePool阅读">
+                YYDispatchQueuePool阅读 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -560,7 +554,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目的："><span class="nav-number">1.</span> <span class="nav-text">目的：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析源码（TODO-待完善）"><span class="nav-number">3.</span> <span class="nav-text">分析源码（TODO:待完善）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用示例（TODO-待完善）"><span class="nav-number">4.</span> <span class="nav-text">调用示例（TODO:待完善）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码链接"><span class="nav-number">5.</span> <span class="nav-text">源码链接</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#YYDispatchQueuePool"><span class="nav-number">5.0.1.</span> <span class="nav-text">YYDispatchQueuePool</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CFRunloopRef"><span class="nav-number">2.</span> <span class="nav-text">CFRunloopRef</span></a></li></ol></div>
             
 
           </div>

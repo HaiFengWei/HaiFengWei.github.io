@@ -82,14 +82,14 @@
 <meta name="description" content="如何在不破坏原有类封装下添加属性当我们想给系统类或者自定义基类添加某个属性（简称targetVaule）时，在不破坏原有类封装情形下：  Object-C: 可以使用继承（直接添加属性）和分类（动态添加属性）。 Swift: 可以使用继承（直接添加属性）和拓展（动态添加属性）。  注： 推荐使用拓展Swift和分类Object-C,因为使用继承，所有使用到targetVaule都需要继承自定义属性">
 <meta name="keywords" content="Object-C,runtime,Swift">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS动态添加属性">
-<meta property="og:url" content="http://yoursite.com/2018/10/06/iOS动态添加属性/index.html">
+<meta property="og:title" content="iOS动态绑定属性">
+<meta property="og:url" content="http://yoursite.com/2018/10/06/iOS动态绑定属性/index.html">
 <meta property="og:site_name" content="Seapeak&#39;s blogs">
 <meta property="og:description" content="如何在不破坏原有类封装下添加属性当我们想给系统类或者自定义基类添加某个属性（简称targetVaule）时，在不破坏原有类封装情形下：  Object-C: 可以使用继承（直接添加属性）和分类（动态添加属性）。 Swift: 可以使用继承（直接添加属性）和拓展（动态添加属性）。  注： 推荐使用拓展Swift和分类Object-C,因为使用继承，所有使用到targetVaule都需要继承自定义属性">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-06T07:41:16.088Z">
+<meta property="og:updated_time" content="2018-12-09T16:57:59.293Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS动态添加属性">
+<meta name="twitter:title" content="iOS动态绑定属性">
 <meta name="twitter:description" content="如何在不破坏原有类封装下添加属性当我们想给系统类或者自定义基类添加某个属性（简称targetVaule）时，在不破坏原有类封装情形下：  Object-C: 可以使用继承（直接添加属性）和分类（动态添加属性）。 Swift: 可以使用继承（直接添加属性）和拓展（动态添加属性）。  注： 推荐使用拓展Swift和分类Object-C,因为使用继承，所有使用到targetVaule都需要继承自定义属性">
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/10/06/iOS动态添加属性/">
+  <link rel="canonical" href="http://yoursite.com/2018/10/06/iOS动态绑定属性/">
 
 
 
 
 
-  <title>iOS动态添加属性 | Seapeak's blogs</title>
+  <title>iOS动态绑定属性 | Seapeak's blogs</title>
   
 
 
@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/06/iOS动态添加属性/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/06/iOS动态绑定属性/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="海风">
@@ -280,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">iOS动态添加属性</h1>
+          <h1 class="post-title" itemprop="name headline">iOS动态绑定属性</h1>
         
 
         <div class="post-meta">
@@ -333,8 +333,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/10/06/iOS动态添加属性/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/10/06/iOS动态添加属性/" itemprop="commentCount"></span>
+                <a href="/2018/10/06/iOS动态绑定属性/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/10/06/iOS动态绑定属性/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -369,14 +369,16 @@
 </ul>
 <p><strong>注：</strong> 推荐使用<strong>拓展<code>Swift</code></strong>和<strong>分类<code>Object-C</code></strong>,因为使用继承，所有使用到<code>targetVaule</code>都需要继承自定义属性类，侵入性太强。<a id="more"></a></p>
 <h3 id="动态添加属性原理"><a href="#动态添加属性原理" class="headerlink" title="动态添加属性原理"></a>动态添加属性原理</h3><p>利用runtime的特性，使用关联方法，让对象和某个属性产生联系。</p>
-<h3 id="Object-C为分类添加属性"><a href="#Object-C为分类添加属性" class="headerlink" title="Object-C为分类添加属性"></a>Object-C为分类添加属性</h3><p><strong>.h文件中</strong></p>
+<h3 id="Object-C为分类添加属性-动态绑定而非添加property"><a href="#Object-C为分类添加属性-动态绑定而非添加property" class="headerlink" title="Object-C为分类添加属性( 动态绑定而非添加property )"></a>Object-C为分类添加属性( <em>动态绑定而非添加<code>property</code></em> )</h3><p><strong>.h文件中</strong></p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Test</span> (<span class="title">NSObject</span>)</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">strong</span>, <span class="keyword">nonatomic</span>) <span class="built_in">NSString</span> *targetVaule;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
 <p><strong>.m文件中</strong></p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">char</span> *targetVaulekey = <span class="string">"targetVaulekey"</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Test</span> (<span class="title">NSObject</span>)</span></span><br><span class="line"></span><br><span class="line">-(<span class="keyword">void</span>)setTargetVaule:(<span class="built_in">NSString</span> *)targetVaule&#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    OBJC_ASSOCIATION_ASSIGN;            // assign策略</span></span><br><span class="line"><span class="comment">    OBJC_ASSOCIATION_COPY_NONATOMIC;    // copy策略</span></span><br><span class="line"><span class="comment">    OBJC_ASSOCIATION_RETAIN_NONATOMIC;  // retain策略</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    OBJC_ASSOCIATION_RETAIN;</span></span><br><span class="line"><span class="comment">    OBJC_ASSOCIATION_COPY;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">     <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * id object 给哪个对象的属性赋值</span></span><br><span class="line"><span class="comment">       const void *key 属性对应的key</span></span><br><span class="line"><span class="comment">       id value  设置属性值为value</span></span><br><span class="line"><span class="comment">       objc_AssociationPolicy policy  使用的策略，是一个枚举值，和copy，retain，assign是一样的，手机开发一般都选择NONATOMIC</span></span><br><span class="line"><span class="comment">          objc_setAssociatedObject(id object, const void *key, id value, objc_AssociationPolicy policy);</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    objc_setAssociatedObject(<span class="keyword">self</span>, targetVaulekey, targetVaule, OBJC_ASSOCIATION_COPY_NONATOMIC);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-(<span class="built_in">NSString</span> *)targetVaule&#123;</span><br><span class="line">    <span class="keyword">return</span> objc_getAssociatedObject(<span class="keyword">self</span>, targetVaulekey);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
-<h3 id="Swift为拓展添加属性"><a href="#Swift为拓展添加属性" class="headerlink" title="Swift为拓展添加属性"></a>Swift为拓展添加属性</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="built_in">NSObjcCategoriesKeys</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> var targetVaulekey : String = <span class="string">"targetVaulekey"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">extension <span class="built_in">NSObjc</span> &#123;</span><br><span class="line">    var targetVaule: String? &#123;</span><br><span class="line">        set(newValue) &#123;</span><br><span class="line">            objc_setAssociatedObject(<span class="keyword">self</span>, &amp;<span class="built_in">NSObjcCategoriesKeys</span>. targetVaulekey, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)</span><br><span class="line">        &#125;</span><br><span class="line">        get &#123;</span><br><span class="line">            <span class="keyword">return</span>  objc_getAssociatedObject(<span class="keyword">self</span>, &amp;<span class="built_in">NSObjcCategoriesKeys</span>. targetVaulekey) as? String</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Test</span> (<span class="title">NSObject</span>)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">char</span> *targetVaulekey = <span class="string">"targetVaulekey"</span>;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)setTargetVaule:(<span class="built_in">NSString</span> *)targetVaule &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    OBJC_ASSOCIATION_ASSIGN;            // assign策略</span></span><br><span class="line"><span class="comment">    OBJC_ASSOCIATION_COPY_NONATOMIC;    // copy策略</span></span><br><span class="line"><span class="comment">    OBJC_ASSOCIATION_RETAIN_NONATOMIC;  // retain策略</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">    OBJC_ASSOCIATION_RETAIN;</span></span><br><span class="line"><span class="comment">    OBJC_ASSOCIATION_COPY;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">     <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * id object 给哪个对象的属性赋值</span></span><br><span class="line"><span class="comment">       const void *key 属性对应的key</span></span><br><span class="line"><span class="comment">       id value  设置属性值为value</span></span><br><span class="line"><span class="comment">       objc_AssociationPolicy policy  使用的策略，是一个枚举值，和copy，retain，assign是一样的，手机开发一般都选择NONATOMIC</span></span><br><span class="line"><span class="comment">          objc_setAssociatedObject(id object, const void *key, id value, objc_AssociationPolicy policy);</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    objc_setAssociatedObject(<span class="keyword">self</span>, targetVaulekey, targetVaule, OBJC_ASSOCIATION_COPY_NONATOMIC);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="built_in">NSString</span> *)targetVaule &#123;</span><br><span class="line">    <span class="keyword">return</span> objc_getAssociatedObject(<span class="keyword">self</span>, targetVaulekey);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<h3 id="Swift为拓展添加属性（-储存属性-）"><a href="#Swift为拓展添加属性（-储存属性-）" class="headerlink" title="Swift为拓展添加属性（ 储存属性 ）"></a>Swift为拓展添加属性（ <em>储存属性</em> ）</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="built_in">NSObjcCategoriesKeys</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> var targetVaulekey : String = <span class="string">"targetVaulekey"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// static var targetVaulekey : String = "targetVaulekey"</span></span><br><span class="line"></span><br><span class="line">extension <span class="built_in">NSObjc</span> &#123;</span><br><span class="line">    var targetVaule: String? &#123;</span><br><span class="line">        set(newValue) &#123;</span><br><span class="line">            objc_setAssociatedObject(<span class="keyword">self</span>, &amp;<span class="built_in">NSObjcCategoriesKeys</span>.targetVaulekey, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)</span><br><span class="line"></span><br><span class="line">           <span class="comment">// objc_setAssociatedObject(self, &amp;targetVaulekey, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)</span></span><br><span class="line">        &#125;</span><br><span class="line">        get &#123;</span><br><span class="line">            <span class="keyword">return</span>  objc_getAssociatedObject(<span class="keyword">self</span>, &amp;<span class="built_in">NSObjcCategoriesKeys</span>.targetVaulekey) as? String</span><br><span class="line">           <span class="comment">//  return  objc_getAssociatedObject(self, &amp;targetVaulekey) as? String</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="注："><a href="#注：" class="headerlink" title="注："></a>注：</h4><ol>
-<li><code>Swift</code>中没有分类这个概念，仅有拓展</li>
-<li>为什么使用结构体而不使用常量，因为使用常量，多个对象使用这一属性时，所绑定的key是一样的，会将值储存在同一内存，会造成错乱。而使用结构体则相当于每创建一个对象就会创建一个对应的结构体对象与其一一对应，所以绑定的key也是不同的，不会造成错乱</li>
+<li><code>Swift</code>中没有分类这个概念，仅有拓展，支持添加计算属性，不支持储存属性<ol start="2">
+<li>动态绑定添加属性，不支持属性遍历</li>
+</ol>
+</li>
 </ol>
 
       
@@ -421,6 +423,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/07/iOS动态添加属性/" rel="prev" title="iOS动态添加属性">
+                iOS动态添加属性 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -504,7 +510,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -526,7 +532,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -559,7 +565,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何在不破坏原有类封装下添加属性"><span class="nav-number">1.</span> <span class="nav-text">如何在不破坏原有类封装下添加属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态添加属性原理"><span class="nav-number">2.</span> <span class="nav-text">动态添加属性原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-C为分类添加属性"><span class="nav-number">3.</span> <span class="nav-text">Object-C为分类添加属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Swift为拓展添加属性"><span class="nav-number">4.</span> <span class="nav-text">Swift为拓展添加属性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注："><span class="nav-number">4.1.</span> <span class="nav-text">注：</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何在不破坏原有类封装下添加属性"><span class="nav-number">1.</span> <span class="nav-text">如何在不破坏原有类封装下添加属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态添加属性原理"><span class="nav-number">2.</span> <span class="nav-text">动态添加属性原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Object-C为分类添加属性-动态绑定而非添加property"><span class="nav-number">3.</span> <span class="nav-text">Object-C为分类添加属性( 动态绑定而非添加property )</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Swift为拓展添加属性（-储存属性-）"><span class="nav-number">4.</span> <span class="nav-text">Swift为拓展添加属性（ 储存属性 ）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注："><span class="nav-number">4.1.</span> <span class="nav-text">注：</span></a></li></ol></li></ol></div>
             
 
           </div>
